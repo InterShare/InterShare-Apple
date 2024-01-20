@@ -7,12 +7,18 @@
 
 import SwiftUI
 import DataRCT
+import PhotosUI
 
 struct ContentView: View {
     @ObservedObject var viewModel = ContentViewModel()
+
     
     var body: some View {
         List {
+            Section(header: Text("Device name")) {
+                TextField("Name", text: $viewModel.deviceName)
+            }
+            
             Section(header: Text("Discovered Devices")) {
                 ForEach(viewModel.discoveredDevices, id: \.id) { device in
                     Button(action: {
@@ -40,9 +46,15 @@ struct ContentView: View {
                         ) {
                             Label(device.name, systemImage: "info")
                             Label(device.id, systemImage: "info")
-                            Label(device.deviceType, systemImage: "info")
-                            Label(device.ipAddress, systemImage: "globe")
-                            Label(String(device.port), systemImage: "globe")
+//                            Label(device.deviceType, systemImage: "info")
+//                            Label(device.ipAddress, systemImage: "globe")
+//                            Label(String(device.port), systemImage: "globe")
+                        }
+                        
+                        PhotosPicker(
+                            selection: $viewModel.imageSelection,
+                            photoLibrary: .shared()) {
+                            Text("Send Image/Video")
                         }
                         
                         Section {
@@ -63,7 +75,7 @@ struct ContentView: View {
                 }
             }
         }
-        .navigationTitle("DataRCT")
+        .navigationTitle("InterShare")
         .toolbar {
             ToolbarItem() {
                 VStack {
@@ -77,6 +89,7 @@ struct ContentView: View {
                             .tag(false)
                     }
                     .pickerStyle(.segmented)
+                    .disabled(!viewModel.isPoweredOn)
                     .onChange(of: viewModel.advertisementEnabled, perform: { (value) in
                         viewModel.changeAdvertisementState()
                     })

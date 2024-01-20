@@ -9,9 +9,11 @@
 /* Begin PBXBuildFile section */
 		0A0479E9299D56A200CF5566 /* DeviceInfoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0479E8299D56A200CF5566 /* DeviceInfoListView.swift */; };
 		0A0479EB299D61DF00CF5566 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0479EA299D61DF00CF5566 /* ViewExtension.swift */; };
-		0A05AB37299CD97000A0EC74 /* DataRCT in Frameworks */ = {isa = PBXBuildFile; productRef = 0A05AB36299CD97000A0EC74 /* DataRCT */; };
+		0A19E44B2B5C48E3007DB15A /* PulseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A19E44A2B5C48E3007DB15A /* PulseView.swift */; };
+		0A5CFECC2B4894AD0004247E /* DataRCTFFI.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A5CFECB2B4894AD0004247E /* DataRCTFFI.xcframework */; };
 		0A6C60C32A88D2AD003ADA7A /* IpHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6C60C22A88D2AD003ADA7A /* IpHelper.swift */; };
-		0AC8ECB92B3F08F00034F1DA /* DataRCT in Frameworks */ = {isa = PBXBuildFile; productRef = 0AC8ECB82B3F08F00034F1DA /* DataRCT */; };
+		0A7335E62B564568005B6AC2 /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7335E52B564568005B6AC2 /* ConnectionRequestView.swift */; };
+		0A87525E2B488F9000B07368 /* DataRCT in Frameworks */ = {isa = PBXBuildFile; productRef = 0A87525D2B488F9000B07368 /* DataRCT */; };
 		0AEC7C18299BA2FA005BBB0E /* InterShareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC7C17299BA2FA005BBB0E /* InterShareApp.swift */; };
 		0AEC7C1A299BA2FA005BBB0E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC7C19299BA2FA005BBB0E /* ContentView.swift */; };
 		0AEC7C1C299BA2FB005BBB0E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AEC7C1B299BA2FB005BBB0E /* Assets.xcassets */; };
@@ -19,11 +21,27 @@
 		0AEC7C33299CD2FA005BBB0E /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC7C32299CD2FA005BBB0E /* ContentViewModel.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		0AF47D102B488E9100B5E7DF /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		0A0479E8299D56A200CF5566 /* DeviceInfoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoListView.swift; sourceTree = "<group>"; };
 		0A0479EA299D61DF00CF5566 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
+		0A19E44A2B5C48E3007DB15A /* PulseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseView.swift; sourceTree = "<group>"; };
 		0A435E0A2A6F0F78008161DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		0A5CFECB2B4894AD0004247E /* DataRCTFFI.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DataRCTFFI.xcframework; path = ../../../data_rct/bindings/swift/DataRCTFFI.xcframework; sourceTree = "<group>"; };
 		0A6C60C22A88D2AD003ADA7A /* IpHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IpHelper.swift; sourceTree = "<group>"; };
+		0A7335E52B564568005B6AC2 /* ConnectionRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestView.swift; sourceTree = "<group>"; };
 		0AEC7C14299BA2FA005BBB0E /* InterShare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InterShare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AEC7C17299BA2FA005BBB0E /* InterShareApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterShareApp.swift; sourceTree = "<group>"; };
 		0AEC7C19299BA2FA005BBB0E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -38,8 +56,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0AC8ECB92B3F08F00034F1DA /* DataRCT in Frameworks */,
-				0A05AB37299CD97000A0EC74 /* DataRCT in Frameworks */,
+				0A5CFECC2B4894AD0004247E /* DataRCTFFI.xcframework in Frameworks */,
+				0A87525E2B488F9000B07368 /* DataRCT in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +109,7 @@
 		0AEC7C26299BA324005BBB0E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0A5CFECB2B4894AD0004247E /* DataRCTFFI.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -107,6 +126,8 @@
 			children = (
 				0AEC7C19299BA2FA005BBB0E /* ContentView.swift */,
 				0A0479E8299D56A200CF5566 /* DeviceInfoListView.swift */,
+				0A7335E52B564568005B6AC2 /* ConnectionRequestView.swift */,
+				0A19E44A2B5C48E3007DB15A /* PulseView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -129,6 +150,7 @@
 				0AEC7C10299BA2FA005BBB0E /* Sources */,
 				0AEC7C11299BA2FA005BBB0E /* Frameworks */,
 				0AEC7C12299BA2FA005BBB0E /* Resources */,
+				0AF47D102B488E9100B5E7DF /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -136,8 +158,7 @@
 			);
 			name = InterShare;
 			packageProductDependencies = (
-				0A05AB36299CD97000A0EC74 /* DataRCT */,
-				0AC8ECB82B3F08F00034F1DA /* DataRCT */,
+				0A87525D2B488F9000B07368 /* DataRCT */,
 			);
 			productName = InterShare;
 			productReference = 0AEC7C14299BA2FA005BBB0E /* InterShare.app */;
@@ -168,7 +189,7 @@
 			);
 			mainGroup = 0AEC7C0B299BA2FA005BBB0E;
 			packageReferences = (
-				0AC8ECB72B3F08F00034F1DA /* XCLocalSwiftPackageReference "../../../data_rct" */,
+				0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../../data_rct" */,
 			);
 			productRefGroup = 0AEC7C15299BA2FA005BBB0E /* Products */;
 			projectDirPath = "";
@@ -201,6 +222,8 @@
 				0A0479E9299D56A200CF5566 /* DeviceInfoListView.swift in Sources */,
 				0AEC7C33299CD2FA005BBB0E /* ContentViewModel.swift in Sources */,
 				0A6C60C32A88D2AD003ADA7A /* IpHelper.swift in Sources */,
+				0A7335E62B564568005B6AC2 /* ConnectionRequestView.swift in Sources */,
+				0A19E44B2B5C48E3007DB15A /* PulseView.swift in Sources */,
 				0A0479EB299D61DF00CF5566 /* ViewExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -332,6 +355,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = InterShare/Info.plist;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This App needs BLE";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Looking for local tcp Bonjour service";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -374,6 +399,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = InterShare/Info.plist;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This App needs BLE";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Looking for local tcp Bonjour service";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -425,18 +452,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		0AC8ECB72B3F08F00034F1DA /* XCLocalSwiftPackageReference "../../../data_rct" */ = {
+		0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../../data_rct" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../../data_rct;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		0A05AB36299CD97000A0EC74 /* DataRCT */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = DataRCT;
-		};
-		0AC8ECB82B3F08F00034F1DA /* DataRCT */ = {
+		0A87525D2B488F9000B07368 /* DataRCT */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DataRCT;
 		};

@@ -6,5 +6,7 @@
 	<array>
 		<string>_data-rct._tcp.local.</string>
 	</array>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 </dict>
 </plist>
