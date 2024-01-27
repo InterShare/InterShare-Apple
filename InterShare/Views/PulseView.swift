@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PulseView: View {
     @State private var animate = false
+    @State private var currentSize: CGSize?
 
     var body: some View {
         ZStack {
@@ -25,16 +26,30 @@ struct PulseView: View {
         Circle()
             .stroke(lineWidth: 1.0)
             .foregroundColor(.gray)
-            .frame(width: animate ? 500 : 0, height: animate ? 500 : 0) // Change the frame size instead of scale
+            .frame(width: animate ? UIScreen.main.bounds.width : 0, height: animate ? UIScreen.main.bounds.width : 0)
+            .position(x: UIScreen.main.bounds.width / 2, y: 0)
             .opacity(animate ? 0 : 1)
             .animation(Animation.easeInOut(duration: 6)
-                .repeatForever(autoreverses: false)
-                .delay(delay), value: animate)
+                        .repeatForever(autoreverses: false)
+                        .delay(delay), value: animate)
     }
 }
 
 
-
 #Preview {
-    PulseView()
+    NavigationStack {
+        VStack {
+            PulseView()
+                .padding(.top)
+
+            VStack {
+                Text("Share")
+                    .opacity(0.7)
+                    .bold()
+                    .padding(50)
+                
+            }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                .navigationTitle("InterShare")
+        }
+    }
 }

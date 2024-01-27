@@ -13,6 +13,7 @@ struct InterShareApp: App {
         WindowGroup {
             NavigationStack {
                 ContentView()
+                    .environmentObject(DiscoveryService())
             }
         }
     }

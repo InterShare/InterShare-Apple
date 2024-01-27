@@ -10,22 +10,22 @@ import DataRCT
 import PhotosUI
 import SwiftUI
 
-#if os(iOS)
-import UIKit
-#endif
-
-class ContentViewModel: ObservableObject, NearbyServerDelegate, DiscoveryDelegate {
+class ContentViewModel: ObservableObject, NearbyServerDelegate {
     private var incomingThread: Thread?
-    private var nearbyServer: NearbyServer?
-    private var discovery: Discovery?
+    private var myDevice: Device?
+    private var temporaryDirectory: URL = FileManager.default.temporaryDirectory
+    public var nearbyServer: NearbyServer?
 
-    @Published public var discoveredDevices: [Device] = []
     @Published public var advertisementEnabled = false
-    @Published public var sheetOpened: Bool = false
-    @Published public var fakeSheetOpened: Bool = true
-    @Published public var clickedDevice: Device?
     @Published public var isPoweredOn: Bool = false
-    @Published public var deviceName: String = "iPhone"
+    @Published public var selectedImageURL: String?
+    @Published public var showDeviceSelectionSheet: Bool = false
+    @Published public var showConnectionRequestDialog: Bool = false
+    @Published public var currentConnectionRequest: ConnectionRequest?
+    @Published public var showDeviceNamingAlert: Bool = false
+    @Published public var namingSaveButtonDisabled: Bool = true
+    
+    @Published public var deviceName: String = ""
 
     @Published public var imageSelection: PhotosPickerItem? = nil {
         didSet {
@@ -33,13 +33,10 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate, DiscoveryDelegat
                 getURL(item: imageSelection) { result in
                     switch result {
                     case .success(let data):
-                        print(result)
-                        Task {
-                            do {
-                                try await self.nearbyServer?.sendFile(to: self.clickedDevice!, url: data.path)
-                            } catch {
-                                print(error)
-                            }
+                        self.selectedImageURL = data.path
+                        self.showDeviceSelectionSheet = self.selectedImageURL != nil
+                        DispatchQueue.main.async {
+                            self.imageSelection = nil
                         }
                     case .failure(_):
                         print("Failed")
@@ -50,17 +47,29 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate, DiscoveryDelegat
         }
     }
     
+    init() {
+        let deviceName = UserDefaults.standard.string(forKey: "deviceName")
+
+        guard let deviceName else {
+            DispatchQueue.main.async {
+                self.showDeviceNamingAlert = true
+            }
+            return
+        }
+        
+        initializeServer(deviceName: deviceName)
+    }
+    
     func getURL(item: PhotosPickerItem, completionHandler: @escaping (_ result: Result<URL, Error>) -> Void) {
-       // Step 1: Load as Data object.
         item.loadTransferable(type: Data.self) { result in
             switch result {
             case .success(let data):
                 if let contentType = item.supportedContentTypes.first {
-                   // Step 2: make the URL file name and a get a file extention.
-                    let url = ContentViewModel.getDocumentsDirectory().appendingPathComponent("\(UUID().uuidString).\(contentType.preferredFilenameExtension ?? "")")
+
                     if let data = data {
                         do {
-                           // Step 3: write to temp App file directory and return in completionHandler
+                            let url = self.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).\(contentType.preferredFilenameExtension ?? "")")
+
                             try data.write(to: url)
                             completionHandler(.success(url))
                         } catch {
@@ -76,114 +85,110 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate, DiscoveryDelegat
 
     /// from: https://www.hackingwithswift.com/books/ios-swiftui/writing-data-to-the-documents-directory
     static func getDocumentsDirectory() -> URL {
-       // find all possible documents directories for this user
-       let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-
-       // just send back the first one, which ought to be the only one
-       return paths[0]
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        
+        return paths[0]
     }
     
-    init() {
-        var deviceName = "Swift DataRCT"
-        var deviceType = ""
+    func initializeServer(deviceName: String) {
+        self.deviceName = deviceName
+        var deviceId = UserDefaults.standard.string(forKey: "deviceIdentifier")
+        
+        if deviceId == nil {
+            deviceId = UUID().uuidString
+            UserDefaults.standard.set(deviceId, forKey: "deviceIdentifier")
+        }
+        
+        let idiom = UIDevice.current.userInterfaceIdiom
+        var deviceType = DeviceType.unknown
+        
+        if idiom == .pad {
+            deviceType = .tablet
+        } else if idiom == .phone {
+            deviceType = .mobile
+        } else if idiom == .mac {
+            deviceType = .mobile
+        }
 
-#if os(iOS)
-        deviceName = UIDevice.current.name
-        deviceType = "phone, apple"
-#elseif os(macOS)
-        deviceType = "computer, apple"
-#endif
+        myDevice = Device(
+            id: deviceId!,
+            name: deviceName,
+            deviceType: deviceType.rawValue
+        )
+        
+        let storageURL = ContentViewModel.getDocumentsDirectory().path
+        
+        nearbyServer = NearbyServer(myDevice: myDevice!, storage: storageURL, delegate: self)
+    }
+    
+    public func saveName() {
+        if deviceName.count < 3 {
+            showDeviceNamingAlert = true
+            return
+        }
+        
+        UserDefaults.standard.set(deviceName, forKey: "deviceName")
+
+        if let nearbyServer, var myDevice {
+            myDevice.name = deviceName
+            nearbyServer.changeDevice(myDevice)
+        } else {
+            initializeServer(deviceName: deviceName)
+        }
+    }
+
+    func stopServer() async {
         do {
-            
-            let ipAddress = getIpAddress() ?? ""
-            print("IP: \(ipAddress)")
-            
-            var device = Device(
-                id: UUID().uuidString,
-                name: deviceName,
-                deviceType: 0
-            )
-            
-            let storageURL = ContentViewModel.getDocumentsDirectory().path
-            
-            nearbyServer = NearbyServer(myDevice: device, storage: storageURL, delegate: self)
-            discovery = try Discovery(delegate: self)
+            try await nearbyServer?.stop()
         } catch {
-            print("Error! \(error)")
+            print(error)
         }
     }
     
     func nearbyServerDidUpdateState(state: BluetoothState) {
         isPoweredOn = state == .poweredOn
-    }
-    
-    func discoveryDidUpdateState(state: BluetoothState) {
-        if state == .poweredOn {
-            do {
-                try discovery?.startScan()
-            }
-            catch {
-                print(error)
-            }
-        }
-    }
-    
-    func deviceAdded(value: DataRCT.Device) {
-        DispatchQueue.main.async {
-            self.discoveredDevices.append(value)
-        }
-    }
-    
-    func deviceRemoved(deviceId: String) {
-        DispatchQueue.main.async {
-            self.discoveredDevices.removeAll { $0.id == deviceId }
-        }
+        advertisementEnabled = isPoweredOn
     }
     
     func changeAdvertisementState() {
         if nearbyServer?.state != .poweredOn {
             return
         }
-        
-        do {
-            if advertisementEnabled {
-                let device = Device(
-                    id: UUID().uuidString,
-                    name: deviceName,
-                    deviceType: 0
-                )
-                
-                nearbyServer?.changeDevice(device)
-//                    try await nearbyServer?.start()
-                
-                Task {
+
+        Task {
+            do {
+                if advertisementEnabled {
                     try await self.nearbyServer?.start()
-                }
-            } else {
-                Task {
+                } else {
                     try await nearbyServer?.stop()
                 }
+            } catch {
+                print(error)
             }
         }
-        catch {
-            print(error)
+    }
+    
+    func receivedConnectionRequest(request: ConnectionRequest) {
+        if self.showDeviceNamingAlert || self.showDeviceSelectionSheet || self.showConnectionRequestDialog {
+            request.decline()
+            return
+        }
+
+        DispatchQueue.main.async {
+            self.currentConnectionRequest = request
+            self.showConnectionRequestDialog = true
         }
     }
     
-    public func connect(to device: Device) {
+    public func onDeviceListSheetDismissed() {
         Task {
-//            await nearbyServer?.connect(device)
+            do {
+                if let selectedImageURL {
+                    try FileManager.default.removeItem(atPath: selectedImageURL)
+                }
+            } catch {
+                print(error)
+            }
         }
-//        do {
-//            let connection = try _transmission?.connectToDevice(recipient: device)
-//            let result = try connection?.writeBytes(buffer: Array("Hello, World".utf8))
-//            print(result)
-//        } catch {
-//            print(error)
-//        }
-    }
-    
-    func receivedConnectionRequest(request: DataRCT.ConnectionRequest) {
-        request.accept()
     }
 }

@@ -10,92 +10,134 @@ import DataRCT
 import PhotosUI
 
 struct ContentView: View {
+    @Environment(\.scenePhase) var scenePhase
+    @EnvironmentObject var discoveryService: DiscoveryService
     @ObservedObject var viewModel = ContentViewModel()
-
     
     var body: some View {
-        List {
-            Section(header: Text("Device name")) {
-                TextField("Name", text: $viewModel.deviceName)
+        VStack(alignment: .leading) {
+            HStack {
+                Text("Device name:")
+                Button(viewModel.deviceName, action: {
+                    viewModel.showDeviceNamingAlert = true
+                })
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 15)
             
-            Section(header: Text("Discovered Devices")) {
-                ForEach(viewModel.discoveredDevices, id: \.id) { device in
-                    Button(action: {
-                        viewModel.clickedDevice = device
-                        viewModel.sheetOpened = true
-                    }) {
-                        DeviceInfoListView(deviceInfo: device)
-                    }
-                }
+            Spacer()
+            
+            VStack {
+                Text("Share")
+                    .opacity(0.7)
+                    .bold()
+                    .padding()
                 
-                if viewModel.discoveredDevices.count == 0 {
-                    Text("No devices found")
-                        .opacity(0.6)
+                HStack {
+                    PhotosPicker(
+                        selection: $viewModel.imageSelection,
+                        photoLibrary: .shared()) {
+                        Text("Image or Video")
+                                .padding(.vertical, 10)
+                                .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.capsule)
+                    .tint(Color("ButtonTint"))
+                    .foregroundStyle(Color("ButtonTextColor"))
+                    
+                    Button(action: {}) {
+                        Text("File")
+                            .padding(.vertical, 10)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.capsule)
+                    .tint(Color("ButtonTint"))
+                    .foregroundStyle(Color("ButtonTextColor"))
                 }
+                .padding(.horizontal)
+                
+                Button(action: {}) {
+                    Text("Received files")
+                        .padding(.vertical, 10)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .buttonBorderShape(.capsule)
+                .tint(Color("ReceivedFilesTint"))
+                .padding(.horizontal)
             }
             
-            .sheet(isPresented: $viewModel.sheetOpened) {
-                if let device = viewModel.clickedDevice {
-                    List {
-                        Section(header:
-                            VStack {
-                                Spacer(minLength: 10)
-                                Text("Device Configuration")
-                            }
-                        ) {
-                            Label(device.name, systemImage: "info")
-                            Label(device.id, systemImage: "info")
-//                            Label(device.deviceType, systemImage: "info")
-//                            Label(device.ipAddress, systemImage: "globe")
-//                            Label(String(device.port), systemImage: "globe")
-                        }
-                        
-                        PhotosPicker(
-                            selection: $viewModel.imageSelection,
-                            photoLibrary: .shared()) {
-                            Text("Send Image/Video")
-                        }
-                        
-                        Section {
-                            Button(action: {
-                                viewModel.connect(to: device)
-                            }) {
-                                Label("Connect to peer", systemImage: "person.line.dotted.person")
-                            }
-                        }
-                    }
-                    .presentationDetents([.medium, .large])
-                    .navigationTitle(device.name)
-                    #if os(iOS)
-                    .navigationBarTitleDisplayMode(.inline)
-                    #elseif os(macOS)
-                    .frame(width: 350, height: 300)
-                    #endif
+        }
+        
+        .alert("Name this device",
+               isPresented: $viewModel.showDeviceNamingAlert,
+               actions: {
+            TextField("Device name", text: $viewModel.deviceName)
+            Button("Save", action: {
+                viewModel.saveName()
+            })
+        }, message: {
+            Text("Nearby devices will discover this device using this name, which must be at least three characters long.")
+                .multilineTextAlignment(.center)
+        })
+        
+        .alert(
+            (viewModel.currentConnectionRequest?.getSender().name ?? "Unknown") + " wants to send you a file",
+            isPresented: $viewModel.showConnectionRequestDialog,
+            presenting: viewModel.currentConnectionRequest
+        ) { request in
+            Button("Accept") {
+                request.accept()
+            }
+            Button(role: .cancel) {
+                request.decline()
+            } label: {
+                Text("Decline")
+            }
+        } message: { request in
+            Text(request.getSender().name + " wants to send you a file")
+        }
+        
+        
+        .sheet(isPresented: $viewModel.showDeviceSelectionSheet, onDismiss: viewModel.onDeviceListSheetDismissed) {
+            if let nearbyServer = viewModel.nearbyServer,
+               let selectedImageURL = viewModel.selectedImageURL {
+                NavigationStack {
+                    DeviceSelectionView(nearbyServer: nearbyServer, imageURL: selectedImageURL)
+                        .environmentObject(discoveryService)
                 }
+            }
+        }
+        
+        .onChange(of: scenePhase) { newPhase in
+            if newPhase == .active {
+                print("Active")
+            } else if newPhase == .inactive {
+                print("Inactive")
+            } else if newPhase == .background {
+                print("Background")
+            }
+        }
+        
+        .toolbar {
+            ToolbarItem {
+                Picker("Discoverable", selection: $viewModel.advertisementEnabled) {
+                    Text("Visible")
+                        .tag(true)
+                    
+                    Text("Not Visible")
+                        .tag(false)
+                }
+                .pickerStyle(.menu)
+                .disabled(!viewModel.isPoweredOn)
+                .onChange(of: viewModel.advertisementEnabled, perform: { (value) in
+                    viewModel.changeAdvertisementState()
+                })
             }
         }
         .navigationTitle("InterShare")
-        .toolbar {
-            ToolbarItem() {
-                VStack {
-                    Picker("Advertisement", selection: $viewModel.advertisementEnabled) {
-                        Image(systemName: "eye.fill")
-                            .symbolRenderingMode(.multicolor)
-                            .tag(true)
-                        
-                        Image(systemName: "eye.slash.fill")
-                            .symbolRenderingMode(.multicolor)
-                            .tag(false)
-                    }
-                    .pickerStyle(.segmented)
-                    .disabled(!viewModel.isPoweredOn)
-                    .onChange(of: viewModel.advertisementEnabled, perform: { (value) in
-                        viewModel.changeAdvertisementState()
-                    })
-                }
-            }
-        }
     }
 }
 
@@ -103,6 +145,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             ContentView()
+                .environmentObject(DiscoveryService())
         }
     }
 }
