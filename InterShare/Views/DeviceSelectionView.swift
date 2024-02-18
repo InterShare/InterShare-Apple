@@ -19,15 +19,6 @@ struct DeviceSelectionView: View {
     
     var body: some View {
         List {
-//            Section {
-//                HStack {
-//                    ProgressView()
-//                    Text("Looking for nearby devices")
-//                        .padding(.leading)
-//                        .opacity(0.8)
-//                }
-//            }
-            
             ForEach(discoveryService.discoveredDevices, id: \.id) { device in
                 Button(action: {
                     viewModel.send(device: device, progress: discoveryService.deviceSendProgress[device.id]!)

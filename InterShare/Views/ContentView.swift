@@ -71,6 +71,8 @@ struct ContentView: View {
             
         }
         
+        .ignoresSafeArea(.keyboard)
+        
         .alert("Name this device",
                isPresented: $viewModel.showDeviceNamingAlert,
                actions: {
@@ -78,18 +80,30 @@ struct ContentView: View {
             Button("Save", action: {
                 viewModel.saveName()
             })
+            .disabled(viewModel.namingSaveButtonDisabled)
         }, message: {
             Text("Nearby devices will discover this device using this name, which must be at least three characters long.")
                 .multilineTextAlignment(.center)
         })
         
         .alert(
-            (viewModel.currentConnectionRequest?.getSender().name ?? "Unknown") + " wants to send you a file",
+            (viewModel.currentConnectionRequest?.getSender().name ?? "Unknown") + " wants to send you a file (\(toHumanReadableSize(bytes: viewModel.currentConnectionRequest?.getFileTransferIntent()?.fileSize)))",
             isPresented: $viewModel.showConnectionRequestDialog,
             presenting: viewModel.currentConnectionRequest
         ) { request in
             Button("Accept") {
-                request.accept()
+                viewModel.receiveProgress = ReceiveProgress()
+                request.setProgressDelegate(delegate: viewModel.receiveProgress!)
+                
+
+                Thread {
+                    request.accept()
+                }.start()
+                
+                DispatchQueue.main.async {
+                    print("show dialog")
+                    viewModel.showReceivingDialog = true
+                }
             }
             Button(role: .cancel) {
                 request.decline()
@@ -97,9 +111,8 @@ struct ContentView: View {
                 Text("Decline")
             }
         } message: { request in
-            Text(request.getSender().name + " wants to send you a file")
+            Text("\"\(request.getFileTransferIntent()?.fileName ?? "")\"")
         }
-        
         
         .sheet(isPresented: $viewModel.showDeviceSelectionSheet, onDismiss: viewModel.onDeviceListSheetDismissed) {
             if let nearbyServer = viewModel.nearbyServer,
@@ -109,6 +122,14 @@ struct ContentView: View {
                         .environmentObject(discoveryService)
                 }
             }
+        }
+        
+        .sheet(isPresented: $viewModel.showReceivingDialog) {
+            NavigationView {
+                ReceiveContentView(progress: viewModel.receiveProgress ?? ReceiveProgress(), connectionRequest: viewModel.currentConnectionRequest!)
+            }
+            .presentationDetents([.height(200)])
+            .presentationDragIndicator(.visible)
         }
         
         .onChange(of: scenePhase) { newPhase in

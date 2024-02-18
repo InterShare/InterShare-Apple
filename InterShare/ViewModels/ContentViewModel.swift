@@ -5,7 +5,6 @@
 //  Created by Julian Baumann on 15.02.23.
 //
 
-import Foundation
 import DataRCT
 import PhotosUI
 import SwiftUI
@@ -17,15 +16,23 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     public var nearbyServer: NearbyServer?
 
     @Published public var advertisementEnabled = false
-    @Published public var isPoweredOn: Bool = false
+    @Published public var isPoweredOn = false
     @Published public var selectedImageURL: String?
-    @Published public var showDeviceSelectionSheet: Bool = false
-    @Published public var showConnectionRequestDialog: Bool = false
+    @Published public var showDeviceSelectionSheet = false
+    @Published public var showConnectionRequestDialog = false
     @Published public var currentConnectionRequest: ConnectionRequest?
-    @Published public var showDeviceNamingAlert: Bool = false
-    @Published public var namingSaveButtonDisabled: Bool = true
+    @Published public var showDeviceNamingAlert = false
+    @Published public var namingSaveButtonDisabled = false
+    @Published public var showReceivingDialog = false
+    @Published public var receiveProgress: ReceiveProgress?
     
-    @Published public var deviceName: String = ""
+    @Published public var deviceName: String = "" {
+        didSet {
+            DispatchQueue.main.async {
+                self.namingSaveButtonDisabled = self.deviceName.count < 3
+            }
+        }
+    }
 
     @Published public var imageSelection: PhotosPickerItem? = nil {
         didSet {
@@ -123,7 +130,6 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     
     public func saveName() {
         if deviceName.count < 3 {
-            showDeviceNamingAlert = true
             return
         }
         
@@ -169,7 +175,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     }
     
     func receivedConnectionRequest(request: ConnectionRequest) {
-        if self.showDeviceNamingAlert || self.showDeviceSelectionSheet || self.showConnectionRequestDialog {
+        if self.showDeviceNamingAlert || self.showDeviceSelectionSheet || self.showConnectionRequestDialog || self.showConnectionRequestDialog {
             request.decline()
             return
         }

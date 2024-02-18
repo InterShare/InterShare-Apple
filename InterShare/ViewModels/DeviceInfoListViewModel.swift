@@ -8,7 +8,7 @@
 import Foundation
 import DataRCT
 
-class SendProgress: ProgressDelegate, ObservableObject {
+class SendProgress: SendProgressDelegate, ObservableObject {
     @Published var state: SendProgressState = SendProgressState.unknown
     
     func progressChanged(progress: SendProgressState) {

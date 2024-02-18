@@ -13,10 +13,12 @@
 		0A1C35242B60F32200BBE6C3 /* DeviceSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1C35232B60F32200BBE6C3 /* DeviceSelectionView.swift */; };
 		0A5CFECC2B4894AD0004247E /* DataRCTFFI.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A5CFECB2B4894AD0004247E /* DataRCTFFI.xcframework */; };
 		0A6C60C32A88D2AD003ADA7A /* IpHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6C60C22A88D2AD003ADA7A /* IpHelper.swift */; };
-		0A7335E62B564568005B6AC2 /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7335E52B564568005B6AC2 /* ConnectionRequestView.swift */; };
 		0A87525E2B488F9000B07368 /* DataRCT in Frameworks */ = {isa = PBXBuildFile; productRef = 0A87525D2B488F9000B07368 /* DataRCT */; };
 		0A9D71E82B6241BA00618EA7 /* DeviceInfoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9D71E72B6241BA00618EA7 /* DeviceInfoListViewModel.swift */; };
 		0A9D71EF2B63AEA700618EA7 /* DiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9D71EE2B63AEA700618EA7 /* DiscoveryService.swift */; };
+		0ACD8C6D2B6AC8CD00F83E75 /* ReceiveContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD8C6C2B6AC8CD00F83E75 /* ReceiveContentView.swift */; };
+		0ACD8C6F2B6ACB0800F83E75 /* ReceiveProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD8C6E2B6ACB0800F83E75 /* ReceiveProgress.swift */; };
+		0ACD8C712B6ACC6D00F83E75 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD8C702B6ACC6D00F83E75 /* Helper.swift */; };
 		0AEC7C18299BA2FA005BBB0E /* InterShareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC7C17299BA2FA005BBB0E /* InterShareApp.swift */; };
 		0AEC7C1A299BA2FA005BBB0E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC7C19299BA2FA005BBB0E /* ContentView.swift */; };
 		0AEC7C1C299BA2FB005BBB0E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AEC7C1B299BA2FB005BBB0E /* Assets.xcassets */; };
@@ -45,9 +47,11 @@
 		0A435E0A2A6F0F78008161DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		0A5CFECB2B4894AD0004247E /* DataRCTFFI.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DataRCTFFI.xcframework; path = ../../../data_rct/bindings/swift/DataRCTFFI.xcframework; sourceTree = "<group>"; };
 		0A6C60C22A88D2AD003ADA7A /* IpHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IpHelper.swift; sourceTree = "<group>"; };
-		0A7335E52B564568005B6AC2 /* ConnectionRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestView.swift; sourceTree = "<group>"; };
 		0A9D71E72B6241BA00618EA7 /* DeviceInfoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoListViewModel.swift; sourceTree = "<group>"; };
 		0A9D71EE2B63AEA700618EA7 /* DiscoveryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryService.swift; sourceTree = "<group>"; };
+		0ACD8C6C2B6AC8CD00F83E75 /* ReceiveContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveContentView.swift; sourceTree = "<group>"; };
+		0ACD8C6E2B6ACB0800F83E75 /* ReceiveProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveProgress.swift; sourceTree = "<group>"; };
+		0ACD8C702B6ACC6D00F83E75 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		0AEC7C14299BA2FA005BBB0E /* InterShare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InterShare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AEC7C17299BA2FA005BBB0E /* InterShareApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterShareApp.swift; sourceTree = "<group>"; };
 		0AEC7C19299BA2FA005BBB0E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -109,6 +113,7 @@
 				0AEC7C1E299BA2FB005BBB0E /* Preview Content */,
 				0A0479EA299D61DF00CF5566 /* ViewExtension.swift */,
 				0A6C60C22A88D2AD003ADA7A /* IpHelper.swift */,
+				0ACD8C702B6ACC6D00F83E75 /* Helper.swift */,
 			);
 			path = InterShare;
 			sourceTree = "<group>";
@@ -141,9 +146,9 @@
 			children = (
 				0AEC7C19299BA2FA005BBB0E /* ContentView.swift */,
 				0A0479E8299D56A200CF5566 /* DeviceListItem.swift */,
-				0A7335E52B564568005B6AC2 /* ConnectionRequestView.swift */,
 				0A19E44A2B5C48E3007DB15A /* PulseView.swift */,
 				0A1C35232B60F32200BBE6C3 /* DeviceSelectionView.swift */,
+				0ACD8C6C2B6AC8CD00F83E75 /* ReceiveContentView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -153,6 +158,7 @@
 			children = (
 				0AEC7C32299CD2FA005BBB0E /* ContentViewModel.swift */,
 				0A9D71E72B6241BA00618EA7 /* DeviceInfoListViewModel.swift */,
+				0ACD8C6E2B6ACB0800F83E75 /* ReceiveProgress.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -242,7 +248,9 @@
 				0A6C60C32A88D2AD003ADA7A /* IpHelper.swift in Sources */,
 				0A9D71E82B6241BA00618EA7 /* DeviceInfoListViewModel.swift in Sources */,
 				0A9D71EF2B63AEA700618EA7 /* DiscoveryService.swift in Sources */,
-				0A7335E62B564568005B6AC2 /* ConnectionRequestView.swift in Sources */,
+				0ACD8C6F2B6ACB0800F83E75 /* ReceiveProgress.swift in Sources */,
+				0ACD8C6D2B6AC8CD00F83E75 /* ReceiveContentView.swift in Sources */,
+				0ACD8C712B6ACC6D00F83E75 /* Helper.swift in Sources */,
 				0A19E44B2B5C48E3007DB15A /* PulseView.swift in Sources */,
 				0A0479EB299D61DF00CF5566 /* ViewExtension.swift in Sources */,
 			);
@@ -375,6 +383,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = InterShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "InterShare dev";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This App needs BLE";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Looking for local tcp Bonjour service";
@@ -392,7 +402,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.julian-baumann.InterShare";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -419,6 +429,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = InterShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = InterShare;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This App needs BLE";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Looking for local tcp Bonjour service";
@@ -436,7 +448,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.julian-baumann.InterShare";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

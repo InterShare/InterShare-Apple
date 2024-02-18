@@ -35,7 +35,7 @@ struct DeviceInfoListView: View {
             {
             case .connecting:
                 HStack {
-                    Label("Connecting...", systemImage: getSymbol())
+                    Label("Connecting to \(deviceInfo.name)", systemImage: getSymbol())
                         .foregroundColor(.blue)
                     Spacer()
                     ProgressView()
@@ -43,7 +43,7 @@ struct DeviceInfoListView: View {
             
             case .requesting:
                 HStack {
-                    Label("Requesting...", systemImage: getSymbol())
+                    Label("Requesting \(deviceInfo.name)", systemImage: getSymbol())
                         .foregroundColor(.blue)
                     Spacer()
                     ProgressView()
@@ -51,7 +51,7 @@ struct DeviceInfoListView: View {
             
             case .transferring(let progress):
                 HStack {
-                    Label("Transferring", systemImage: getSymbol())
+                    Label(deviceInfo.name, systemImage: getSymbol())
                         .foregroundColor(.blue)
                     Spacer()
                     ProgressView(value: progress)
