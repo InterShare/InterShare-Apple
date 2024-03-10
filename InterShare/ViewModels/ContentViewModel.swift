@@ -13,11 +13,17 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     private var incomingThread: Thread?
     private var myDevice: Device?
     private var temporaryDirectory: URL = FileManager.default.temporaryDirectory
+#if os(macOS)
+    public var documentsDirectory = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask)[0]
+#else
+    public var documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+#endif
     public var nearbyServer: NearbyServer?
+    public var shouldDeleteSelectedFileAfterwards = false
 
     @Published public var advertisementEnabled = false
     @Published public var isPoweredOn = false
-    @Published public var selectedImageURL: String?
+    @Published public var selectedFileURL: String?
     @Published public var showDeviceSelectionSheet = false
     @Published public var showConnectionRequestDialog = false
     @Published public var currentConnectionRequest: ConnectionRequest?
@@ -25,6 +31,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     @Published public var namingSaveButtonDisabled = false
     @Published public var showReceivingDialog = false
     @Published public var receiveProgress: ReceiveProgress?
+    
     
     @Published public var deviceName: String = "" {
         didSet {
@@ -40,8 +47,9 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
                 getURL(item: imageSelection) { result in
                     switch result {
                     case .success(let data):
-                        self.selectedImageURL = data.path
-                        self.showDeviceSelectionSheet = self.selectedImageURL != nil
+                        self.shouldDeleteSelectedFileAfterwards = true
+                        self.selectedFileURL = data.path
+                        self.showDeviceSelectionSheet = self.selectedFileURL != nil
                         DispatchQueue.main.async {
                             self.imageSelection = nil
                         }
@@ -89,13 +97,6 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
             }
         }
     }
-
-    /// from: https://www.hackingwithswift.com/books/ios-swiftui/writing-data-to-the-documents-directory
-    static func getDocumentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        
-        return paths[0]
-    }
     
     func initializeServer(deviceName: String) {
         self.deviceName = deviceName
@@ -105,9 +106,11 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
             deviceId = UUID().uuidString
             UserDefaults.standard.set(deviceId, forKey: "deviceIdentifier")
         }
-        
-        let idiom = UIDevice.current.userInterfaceIdiom
+
         var deviceType = DeviceType.unknown
+        
+#if os(iOS)
+        let idiom = UIDevice.current.userInterfaceIdiom
         
         if idiom == .pad {
             deviceType = .tablet
@@ -116,6 +119,9 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
         } else if idiom == .mac {
             deviceType = .mobile
         }
+#else
+        deviceType = .desktop
+#endif
 
         myDevice = Device(
             id: deviceId!,
@@ -123,7 +129,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
             deviceType: deviceType.rawValue
         )
         
-        let storageURL = ContentViewModel.getDocumentsDirectory().path
+        let storageURL = documentsDirectory.path
         
         nearbyServer = NearbyServer(myDevice: myDevice!, storage: storageURL, delegate: self)
     }
@@ -145,7 +151,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
 
     func stopServer() async {
         do {
-            try await nearbyServer?.stop()
+            try nearbyServer?.stop()
         } catch {
             print(error)
         }
@@ -154,6 +160,8 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     func nearbyServerDidUpdateState(state: BluetoothState) {
         isPoweredOn = state == .poweredOn
         advertisementEnabled = isPoweredOn
+
+        changeAdvertisementState()
     }
     
     func changeAdvertisementState() {
@@ -166,7 +174,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
                 if advertisementEnabled {
                     try await self.nearbyServer?.start()
                 } else {
-                    try await nearbyServer?.stop()
+                    try nearbyServer?.stop()
                 }
             } catch {
                 print(error)
@@ -189,8 +197,11 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     public func onDeviceListSheetDismissed() {
         Task {
             do {
-                if let selectedImageURL {
-                    try FileManager.default.removeItem(atPath: selectedImageURL)
+                if shouldDeleteSelectedFileAfterwards, let selectedFileURL {
+                    try FileManager.default.removeItem(atPath: selectedFileURL)
+                }
+                else if !shouldDeleteSelectedFileAfterwards, let selectedFileURL {
+                    NSURL(string: selectedFileURL)?.stopAccessingSecurityScopedResource()
                 }
             } catch {
                 print(error)

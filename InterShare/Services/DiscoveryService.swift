@@ -52,7 +52,6 @@ class DiscoveryService: ObservableObject, DiscoveryDelegate {
             self.deviceSendProgress.removeValue(forKey: deviceId)
         }
     }
-
     
     public func close() {
         do {
