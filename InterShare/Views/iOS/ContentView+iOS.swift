@@ -9,6 +9,7 @@
 import SwiftUI
 import DataRCT
 import PhotosUI
+import NetworkExtension
 
 struct ContentView: View {
     @Environment(\.scenePhase) var scenePhase
@@ -28,14 +29,34 @@ struct ContentView: View {
         )
 
         UINavigationBar.appearance().largeTitleTextAttributes = [.font: titleFont]
+
+        // TODO: remove test
+//        let configuration = NEHotspotConfiguration.init(ssid: "Nothing", passphrase: "password", isWEP: false)
+//        configuration.joinOnce = true
+//
+//        NEHotspotConfigurationManager.shared.apply(configuration) { (error) in
+//            if error != nil {
+//                if error?.localizedDescription == "already associated."
+//                {
+//                    print("Connected")
+//                }
+//                else{
+//                    print("No Connected")
+//                }
+//            }
+//            else {
+//                print("Connected")
+//            }
+//        }
     }
     
     var body: some View {
-        ZStack {
-            LinearGradient(colors: [.cyan, .blue], startPoint: .topLeading, endPoint: .bottomTrailing)
-                .hueRotation(.degrees(animateGradient ? 45 : 0))
+        ZStack(alignment: .top) {
+            LinearGradient(colors: [Color("StartGradientStart"), Color("StartGradientEnd"), .clear], startPoint: .top, endPoint: .bottom)
+                .frame(height: 300)
+                .hueRotation(.degrees(animateGradient ? 10 : 0))
                 .ignoresSafeArea()
-                .opacity(viewModel.advertisementEnabled ? 0.3 : 0.0)
+//                .opacity(viewModel.advertisementEnabled ? 0.3 : 0.0)
                 .animation(.easeInOut(duration: 2.0), value: viewModel.advertisementEnabled)
                 .onAppear {
                     withAnimation(.easeInOut(duration: 5.0).repeatForever(autoreverses: true)) {
@@ -43,19 +64,31 @@ struct ContentView: View {
                     }
                 }
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .center) {
                 HStack {
-                    Text("Device name:")
-                    Button(viewModel.deviceName, action: {
+                    Button(action: {
                         viewModel.showDeviceNamingAlert = true
-                    })
+                    }) {
+                        ZStack {
+                            Circle().frame(width: 22, height: 22)
+                            Text(viewModel.deviceName.first?.uppercased() ?? "")
+                                .foregroundStyle(.white)
+                                .font(.system(size: 16, weight: .bold, design: .rounded))
+                        }
+                        
+                        Text(viewModel.deviceName)
+                            .padding(.vertical, 5)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.mini)
+                    .buttonBorderShape(.capsule)
                     .lineLimit(1)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 15)
                 
                 Spacer()
-                
+
                 VStack {
                     Text("Share")
                         .opacity(0.7)
@@ -115,6 +148,7 @@ struct ContentView: View {
                     .padding(.horizontal)
                     .animation(nil, value: UUID())
                 }
+                .ignoresSafeArea(.keyboard)
                 
             }
             
@@ -172,24 +206,16 @@ struct ContentView: View {
                 }
             }
             
-            .sheet(isPresented: $viewModel.showReceivingDialog) {
+            .fullScreenCover(isPresented: $viewModel.showReceivingDialog) {
                 NavigationView {
-                    ReceiveContentView(progress: viewModel.receiveProgress ?? ReceiveProgress(), connectionRequest: viewModel.currentConnectionRequest!)
+                    ReceiveContentView(
+                        progress: viewModel.receiveProgress ?? ReceiveProgress(),
+                        downloadsPath: viewModel.documentsDirectory.path,
+                        connectionRequest: viewModel.currentConnectionRequest!)
                 }
-                .presentationDetents([.height(200)])
-                .presentationDragIndicator(.visible)
-            }
-            
-            .toolbar {
-                ToolbarItem {
-                    Button(viewModel.advertisementEnabled ? "Visible" : "Not Visible") {
-                        viewModel.advertisementEnabled.toggle()
-                        viewModel.changeAdvertisementState()
-                    }
-                    .transition(.opacity)
-                    .buttonStyle(.bordered)
-                    .buttonBorderShape(.roundedRectangle(radius: 14))
-                }
+//                .presentationDetents([.height(200)])
+                .presentationDragIndicator(.hidden)
+                .interactiveDismissDisabled(true)
             }
         }
         .navigationTitle("InterShare")

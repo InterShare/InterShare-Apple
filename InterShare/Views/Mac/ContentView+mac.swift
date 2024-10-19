@@ -70,18 +70,11 @@ struct ContentView: View {
         .multilineTextAlignment(.center)
         .foregroundColor(.secondary)
         .padding(.top, 0)
-        .frame(minWidth: 330, maxWidth: 500, minHeight: 150, maxHeight: 500)
+        .frame(minWidth: 330, maxWidth: 330, minHeight: 150, maxHeight: 150)
         .background(VisualEffectView().ignoresSafeArea())
         .toolbar {
-            
             ToolbarItem(placement: .navigation) {
-                Button("Send File") {
-                    print("Pressed")
-                }
-            }
-            
-            ToolbarItem(placement: .navigation) {
-                Button("Clipboard") {
+                Button("Share Clipboard") {
                     print("Pressed")
                 }
             }

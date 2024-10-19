@@ -36,17 +36,28 @@ struct DeviceSelectionView: View {
                 }
             }
             .padding()
-
-            if discoveryService.discoveredDevices.count == 0 {
-                VStack {
+        }
+        .clipped()
+        .frame(maxHeight: .infinity)
+        .padding(.top, 10)
+        .overlay(alignment: .bottom) {
+            VStack(spacing: 8) {
+                HStack() {
                     ProgressView()
-                    Spacer()
                     Text("Looking for neaby devices")
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .opacity(0.6)
                 }
             }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(.thinMaterial)
+            .cornerRadius(15)
+            .shadow(radius: 10)
+            .padding()
+            .safeAreaPadding(.vertical)
         }
-        .padding(.top, 10)
+        
         .scrollContentBackground(.hidden)
         .navigationTitle("InterShare a copy")
 #if os(iOS)

@@ -37,6 +37,8 @@ struct DeviceInfoListView: View {
             break
         case .requesting:
             break
+        case .connectionMediumUpdate(medium: _):
+            break
         case .transferring(progress: _):
             return .purple
         case .cancelled:
@@ -55,7 +57,11 @@ struct DeviceInfoListView: View {
             ZStack {
                 Circle()
                     .fill(.linearGradient(colors: [.gray], startPoint: .topLeading, endPoint: .bottomTrailing))
+                #if os(macOS)
+                    .frame(width: 45, height: 45)
+                #else
                     .frame(width: 60, height: 60)
+                #endif
 
                 CircularProgressView(
                     progress: {
@@ -65,21 +71,47 @@ struct DeviceInfoListView: View {
                             1.0
                         } else if progress.state == .declined {
                             1.0
+                        } else if progress.state == .cancelled {
+                            1.0
                         } else {
                             0.0
                         }
                     }(),
                     color: getColor(progress)
                 )
+                .overlay(Group {
+                    ZStack {
+                        if let medium = progress.medium {
+                            if medium == .wiFi {
+                                Image(systemName: "wifi.circle.fill")
+                                    .symbolRenderingMode(.palette)
+                                    .foregroundStyle(.white, .blue)
+                                    .font(.system(size: 20))
+                            } else if medium == .ble {
+                                Image("Bluetooth")
+                                    .resizable()
+                                    .frame(width: 20, height: 20)
+                            }
+                        }
+                    }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                })
                 
                 if progress.state == .requesting || progress.state == .connecting {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    #if os(macOS)
+                        .controlSize(.small)
+                    #else
                         .controlSize(.regular)
+                    #endif
                 } else {
                     Text(deviceInfo.name.first?.uppercased() ?? "")
                         .foregroundStyle(.white)
+                    #if os(macOS)
+                        .font(.system(size: 20, weight: .bold, design: .rounded))
+                    #else
                         .font(.system(size: 25, weight: .bold, design: .rounded))
+                    #endif
                 }
             }
             .padding(.top, 5)
@@ -119,6 +151,8 @@ struct DeviceInfoListView_Previews: PreviewProvider {
                     DeviceInfoListView(deviceInfo: Device(id: UUID().uuidString, name: "My Android", deviceType: 2), progress: SendProgress())
                 }
             }
+            .buttonStyle(.plain)
+            .padding()
         }
     }
 }

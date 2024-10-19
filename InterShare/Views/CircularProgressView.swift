@@ -24,7 +24,11 @@ struct CircularProgressView: View {
             .rotationEffect(.degrees(-90))
             .animation(.easeOut, value: progress)
             .animation(.easeOut, value: color)
+        #if os(macOS)
+            .frame(width: 55, height: 55)
+        #else
             .frame(width: 70, height: 70)
+        #endif
     }
 }
 

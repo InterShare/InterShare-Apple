@@ -9,54 +9,183 @@ import SwiftUI
 import DataRCT
 
 struct ReceiveContentView: View {
+    @Environment(\.dismiss) var dismiss
     @ObservedObject var progress: ReceiveProgress
+    var downloadsPath: String
+    
     var connectionRequest: ConnectionRequest?
+    @State private var gradientHeight: CGFloat = 0.0
+    
+    private func updateGradientHeight(for progressValue: Double) {
+        withAnimation {
+            gradientHeight = CGFloat(progressValue)
+        }
+    }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Receiving file")
-                .bold()
-                .padding(.vertical)
-                .font(.system(size: 25))
-            
-            Text("File: \(connectionRequest?.getFileTransferIntent()?.fileName ?? "Unknown file")")
-                .opacity(/*@START_MENU_TOKEN@*/0.8/*@END_MENU_TOKEN@*/)
-            Text("Size: \(toHumanReadableSize(bytes: connectionRequest?.getFileTransferIntent()?.fileSize))")
-                .opacity(/*@START_MENU_TOKEN@*/0.8/*@END_MENU_TOKEN@*/)
-
-            switch(progress.state)
-            {
-            case .receiving(let progress):
-                ProgressView(value: progress)
-                    .padding(.top)
-                    .padding()
-                
-            case .finished:
-                Image(systemName: "checkmark.circle.fill")
-                    .symbolRenderingMode(.hierarchical)
-                    .foregroundColor(.green)
-                    .font(.system(size: 50))
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            default:
-                ProgressView()
-                    .padding(.top)
-                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+        ZStack(alignment: .top) {
+            GeometryReader { geo in
+                LinearGradient(colors: [Color("StartGradientStart"), Color("StartGradientEnd"), .clear], startPoint: .top, endPoint: .bottom)
+                    .frame(height: gradientHeight * (geo.size.height + (geo.size.height / 2)))
+                    .ignoresSafeArea()
+                    .animation(.easeInOut(duration: 0.5), value: gradientHeight)
             }
+            
+            
+            VStack(alignment: .leading) {
+                Text("From \(connectionRequest?.getSender().name ?? "Unknown")")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                    .bold()
+                    .font(.system(size: 22))
+                    .opacity(0.6)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(connectionRequest?.getFileTransferIntent()?.fileName ?? "Unknown file")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(.primary)
+                    
+                    Text("Size: \(toHumanReadableSize(bytes: connectionRequest?.getFileTransferIntent()?.fileSize))")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(.thinMaterial)
+                .cornerRadius(15)
+                .shadow(radius: 10)
+                .padding()
+                
+                switch(progress.state)
+                {
+                case .receiving(let progressValue):
+                    Text(progressValue, format: .percent.precision(.fractionLength(0)))
+                        .font(.system(size: 40))
+                        .monospaced()
+                        .fontWeight(.bold)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.top, 100)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        Task {
+                            await connectionRequest?.cancel()
+                        }
+                        dismiss()
+                    }) {
+                        Text("Cancel")
+                            .padding(.vertical, 10)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                    .buttonBorderShape(.capsule)
+                    .tint(.red)
+                    .padding(.horizontal)
+                    
+                    .onAppear {
+                        updateGradientHeight(for: progressValue)
+                    }
+                    .onChange(of: progressValue) { newValue in
+                        updateGradientHeight(for: newValue)
+                    }
+    
+                case .finished:
+                    Text(1.0, format: .percent.precision(.fractionLength(0)))
+                        .font(.system(size: 40))
+                        .monospaced()
+                        .fontWeight(.bold)
+                        .foregroundColor(.green)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.top, 100)
+
+                    Spacer()
+                    
+                    Button(action: {
+                        UIApplication.shared.open(URL(string: "shareddocuments://\(downloadsPath)")!)
+                    }) {
+                        Text("Received files")
+                            .padding(.vertical, 10)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.capsule)
+                    .tint(Color("ButtonTint"))
+                    .foregroundStyle(Color("ButtonTextColor"))
+                    .padding(.horizontal)
+                    
+                    Button(action: { dismiss() }) {
+                        Text("Done")
+                            .padding(.vertical, 10)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(Color("ReceivedFilesTint"))
+                    .buttonBorderShape(.capsule)
+                    .padding(.horizontal)
+    
+                case .cancelled:
+                    Text("Cancelled")
+                        .font(.system(size: 40))
+                        .monospaced()
+                        .fontWeight(.bold)
+                        .foregroundColor(.red)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.top, 100)
+                    
+                    Spacer()
+                    
+                    Button(action: { dismiss() }) {
+                        Text("Back")
+                            .padding(.vertical, 10)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(Color("ReceivedFilesTint"))
+                    .buttonBorderShape(.capsule)
+                    .padding(.horizontal)
+    
+                default:
+                    ProgressView()
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 100)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        Task {
+                            await connectionRequest?.cancel()
+                        }
+                        
+                        dismiss()
+                    }) {
+                        Text("Back")
+                            .padding(.vertical, 10)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(Color("ReceivedFilesTint"))
+                    .buttonBorderShape(.capsule)
+                    .padding(.horizontal)
+                }
+            }
+            
         }
-        .padding()
+        .frame(maxHeight: .infinity, alignment: .top)
+        .navigationTitle("Receiving")
     }
 }
 
 #Preview {
     VStack {
     }
-    .sheet(isPresented: .constant(true)) {
+    .fullScreenCover(isPresented: .constant(true)) {
         NavigationView {
-            ReceiveContentView(progress: ReceiveProgress())
+            ReceiveContentView(progress: ReceiveProgress(), downloadsPath: "")
         }
-        .presentationDetents([.height(200)])
-        .presentationDragIndicator(.visible)
+        .presentationDragIndicator(.hidden)
         .interactiveDismissDisabled()
     }
 }

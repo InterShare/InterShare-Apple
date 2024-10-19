@@ -10,9 +10,14 @@ import DataRCT
 
 class SendProgress: SendProgressDelegate, ObservableObject {
     @Published var state: SendProgressState = SendProgressState.unknown
+    @Published var medium: ConnectionMedium?
     
     func progressChanged(progress: SendProgressState) {
         DispatchQueue.main.async {
+            if case .connectionMediumUpdate(let medium) = progress {
+                self.medium = medium
+            }
+            
             self.state = progress
         }
     }
