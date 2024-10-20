@@ -29,110 +29,54 @@ struct ContentView: View {
     private var dropZoneSelectedColor = Color.blue.opacity(0.5)
 
     @Environment(\.scenePhase) var scenePhase
-    @EnvironmentObject var discoveryService: DiscoveryService
+    @StateObject var discoveryService = DiscoveryService()
     @ObservedObject var viewModel = ContentViewModel()
     @State private var animateGradient = true
     @State private var showFileImporter = false
     @State private var dragOver = false
+    @State var isHovered = false
     
     func performDrop(info: DropInfo) -> Bool {
         return true
     }
-    
+
     var body: some View {
         VStack(alignment: .leading) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(dragOver ? dropZoneSelectedColor : dropZonePrimaryColor)
+            
+            HStack {
+                Text("Visible as:")
+                    .opacity(0.5)
                 
-                Text("Drop files here")
-                    .opacity(0.8)
+                Button(action: { viewModel.showDeviceNamingAlertOnMac() }) {
+                    Text(viewModel.deviceName)
+                }
+                .buttonStyle(.link)
             }
-            .padding([.bottom, .trailing, .leading])
-            .onDrop(of: ["public.file-url"], isTargeted: $dragOver) { providers -> Bool in
-                providers.first?.loadDataRepresentation(forTypeIdentifier: "public.file-url", completionHandler: { (data, error) in
-                    if let data = data,
-                       let path = NSString(data: data, encoding: 4),
-                       let url = URL(string: path as String) {
-                        print(url.path)
-                        viewModel.shouldDeleteSelectedFileAfterwards = false
-                        let _ = url.startAccessingSecurityScopedResource()
-                        viewModel.selectedFileURL = url.path
-                        
-                        discoveryService.resetProgress()
-                        viewModel.showDeviceSelectionSheet = true
-                    }
-                })
-
-                return true
+            .padding(5)
+            
+            Divider()
+            
+            MenuButtonView("Quit InterShare") {
+                NSApplication.shared.terminate(nil)
             }
+            
         }
-        .multilineTextAlignment(.center)
-        .foregroundColor(.secondary)
-        .padding(.top, 0)
-        .frame(minWidth: 330, maxWidth: 330, minHeight: 150, maxHeight: 150)
+        .padding(8)
+//        .frame(minWidth: 330, maxWidth: 330, minHeight: 150, maxHeight: 150)
         .background(VisualEffectView().ignoresSafeArea())
-        .toolbar {
-            ToolbarItem(placement: .navigation) {
-                Button("Share Clipboard") {
-                    print("Pressed")
-                }
-            }
-            
-            ToolbarItem {
-                Spacer()
-            }
-            
-            ToolbarItem(placement: .primaryAction) {
-                Button("Settings", systemImage: "gear") {
-                    print("Pressed")
-                }
-            }
-        }
-        
-        .alert(
-            (viewModel.currentConnectionRequest?.getSender().name ?? "Unknown") + " wants to send you a file (\(toHumanReadableSize(bytes: viewModel.currentConnectionRequest?.getFileTransferIntent()?.fileSize)))",
-            isPresented: $viewModel.showConnectionRequestDialog,
-            presenting: viewModel.currentConnectionRequest
-        ) { request in
-            Button("Accept") {
-                viewModel.receiveProgress = ReceiveProgress()
-                request.setProgressDelegate(delegate: viewModel.receiveProgress!)
-                
 
-                Thread {
-                    request.accept()
-                }.start()
-                
-                DispatchQueue.main.async {
-                    print("show dialog")
-                    viewModel.showReceivingDialog = true
-                }
-            }
-            Button(role: .cancel) {
-                request.decline()
-            } label: {
-                Text("Decline")
-            }
-        } message: { request in
-            Text("\"\(request.getFileTransferIntent()?.fileName ?? "")\"")
-        }
-
-        .sheet(isPresented: $viewModel.showDeviceSelectionSheet, onDismiss: viewModel.onDeviceListSheetDismissed) {
-            if let nearbyServer = viewModel.nearbyServer,
-               let selectedImageURL = viewModel.selectedFileURL {
-                DeviceSelectionView(nearbyServer: nearbyServer, imageURL: selectedImageURL)
-                    .environmentObject(discoveryService)
-                    .frame(width: 500, height: 300)
-                    .background(VisualEffectView().ignoresSafeArea())
-            }
-        }
-        
-        .sheet(isPresented: $viewModel.showReceivingDialog) {
-            ReceiveContentView(progress: viewModel.receiveProgress ?? ReceiveProgress(), connectionRequest: viewModel.currentConnectionRequest!)
-                .frame(width: 300, height: 200)
-                .background(VisualEffectView().ignoresSafeArea())
-        }
+        .alert("Name this device",
+               isPresented: $viewModel.showDeviceNamingAlert,
+               actions: {
+            TextField("Device name", text: $viewModel.deviceName)
+            Button("Save", action: {
+                viewModel.saveName()
+            })
+            .disabled(viewModel.namingSaveButtonDisabled)
+        }, message: {
+            Text("Nearby devices will discover this device using this name, which must be at least three characters long.")
+                .multilineTextAlignment(.center)
+        })
     }
 }
 

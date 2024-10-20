@@ -53,7 +53,7 @@ struct DeviceInfoListView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack() {
             ZStack {
                 Circle()
                     .fill(.linearGradient(colors: [.gray], startPoint: .topLeading, endPoint: .bottomTrailing))
@@ -79,6 +79,12 @@ struct DeviceInfoListView: View {
                     }(),
                     color: getColor(progress)
                 )
+#if os(macOS)
+                .frame(width: 55, height: 55)
+            #else
+                .frame(width: 70, height: 70)
+            #endif
+                
                 .overlay(Group {
                     ZStack {
                         if let medium = progress.medium {
@@ -117,20 +123,20 @@ struct DeviceInfoListView: View {
             .padding(.top, 5)
             
             Text(deviceInfo.name)
-                .lineLimit(1)
+                .lineLimit(2)
                 .font(.system(size: 14, weight: .regular, design: .rounded))
                 .opacity(0.8)
                 .foregroundColor(.primary)
                 .frame(maxWidth: 90)
                 .truncationMode(.tail)
             
-            Text(getDeviceType())
-                .lineLimit(1)
-                .font(.system(size: 13, weight: .regular, design: .rounded))
-                .opacity(0.5)
-                .foregroundColor(.primary)
-                .frame(maxWidth: 90)
-                .truncationMode(.tail)
+//            Text(getDeviceType())
+//                .lineLimit(1)
+//                .font(.system(size: 13, weight: .regular, design: .rounded))
+//                .opacity(0.5)
+//                .foregroundColor(.primary)
+//                .frame(maxWidth: 90)
+//                .truncationMode(.tail)
         }
     }
 }
@@ -138,18 +144,24 @@ struct DeviceInfoListView: View {
 struct DeviceInfoListView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            HStack {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))], alignment: .leading, spacing: 15) {
                 Button(action: {}) {
                     DeviceInfoListView(deviceInfo: Device(id: UUID().uuidString, name: "My Phone", deviceType: 0), progress: SendProgress())
                 }
+                .buttonStyle(.bordered)
+                .frame(maxHeight: .infinity, alignment: .top)
                 
                 Button(action: {}) {
                     DeviceInfoListView(deviceInfo: Device(id: UUID().uuidString, name: "My PC", deviceType: 1), progress: SendProgress())
                 }
+                .buttonStyle(.bordered)
+                .frame(maxHeight: .infinity, alignment: .top)
                 
                 Button(action: {}) {
-                    DeviceInfoListView(deviceInfo: Device(id: UUID().uuidString, name: "My Android", deviceType: 2), progress: SendProgress())
+                    DeviceInfoListView(deviceInfo: Device(id: UUID().uuidString, name: "My Android Device Here", deviceType: 2), progress: SendProgress())
                 }
+                .frame(maxHeight: .infinity, alignment: .top)
+                .buttonStyle(.bordered)
             }
             .buttonStyle(.plain)
             .padding()

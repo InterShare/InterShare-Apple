@@ -27,19 +27,33 @@ struct InterShareApp: App {
 #endif
 
     var body: some Scene {
+#if os(macOS)
+        MenuBarExtra("InterShare", image: "MenuIcon") {
+            ContentView()
+        }.menuBarExtraStyle(.window)
+#else
         WindowGroup {
             NavigationStack {
                 ContentView()
-                    .environmentObject(DiscoveryService())
                     .toolbar {
                         Color.clear
                     }
             }
         }
-#if os(macOS)
-        .windowToolbarStyle(UnifiedWindowToolbarStyle())
-        .windowResizability(.contentSize)
-        .windowStyle(.hiddenTitleBar)
 #endif
+        
+//        WindowGroup {
+//            NavigationStack {
+//                ContentView()
+//                    .toolbar {
+//                        Color.clear
+//                    }
+//            }
+//        }
+//#if os(macOS)
+//        .windowToolbarStyle(UnifiedWindowToolbarStyle())
+//        .windowResizability(.contentSize)
+//        .windowStyle(.hiddenTitleBar)
+//#endif
     }
 }

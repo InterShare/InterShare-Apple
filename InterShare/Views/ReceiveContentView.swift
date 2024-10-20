@@ -81,15 +81,17 @@ struct ReceiveContentView: View {
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.bordered)
+#if os(iOS)
                     .buttonBorderShape(.capsule)
+#endif
                     .tint(.red)
                     .padding(.horizontal)
                     
                     .onAppear {
                         updateGradientHeight(for: progressValue)
                     }
-                    .onChange(of: progressValue) { newValue in
-                        updateGradientHeight(for: newValue)
+                    .onChange(of: progressValue) { newState in
+                        updateGradientHeight(for: newState)
                     }
     
                 case .finished:
@@ -103,6 +105,7 @@ struct ReceiveContentView: View {
 
                     Spacer()
                     
+#if os(iOS)
                     Button(action: {
                         UIApplication.shared.open(URL(string: "shareddocuments://\(downloadsPath)")!)
                     }) {
@@ -115,6 +118,7 @@ struct ReceiveContentView: View {
                     .tint(Color("ButtonTint"))
                     .foregroundStyle(Color("ButtonTextColor"))
                     .padding(.horizontal)
+#endif
                     
                     Button(action: { dismiss() }) {
                         Text("Done")
@@ -123,8 +127,14 @@ struct ReceiveContentView: View {
                     }
                     .buttonStyle(.bordered)
                     .tint(Color("ReceivedFilesTint"))
+#if os(iOS)
                     .buttonBorderShape(.capsule)
+#endif
                     .padding(.horizontal)
+                    
+                    .onAppear {
+                        updateGradientHeight(for: 1.0)
+                    }
     
                 case .cancelled:
                     Text("Cancelled")
@@ -144,7 +154,9 @@ struct ReceiveContentView: View {
                     }
                     .buttonStyle(.bordered)
                     .tint(Color("ReceivedFilesTint"))
+#if os(iOS)
                     .buttonBorderShape(.capsule)
+#endif
                     .padding(.horizontal)
     
                 default:
@@ -167,7 +179,9 @@ struct ReceiveContentView: View {
                     }
                     .buttonStyle(.bordered)
                     .tint(Color("ReceivedFilesTint"))
+#if os(iOS)
                     .buttonBorderShape(.capsule)
+#endif
                     .padding(.horizontal)
                 }
             }
@@ -179,13 +193,7 @@ struct ReceiveContentView: View {
 }
 
 #Preview {
-    VStack {
-    }
-    .fullScreenCover(isPresented: .constant(true)) {
-        NavigationView {
-            ReceiveContentView(progress: ReceiveProgress(), downloadsPath: "")
-        }
-        .presentationDragIndicator(.hidden)
-        .interactiveDismissDisabled()
+    NavigationView {
+        ReceiveContentView(progress: ReceiveProgress(), downloadsPath: "")
     }
 }

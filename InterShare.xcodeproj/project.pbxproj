@@ -3,33 +3,85 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		0A0479E9299D56A200CF5566 /* DeviceListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0479E8299D56A200CF5566 /* DeviceListItem.swift */; };
 		0A0479EB299D61DF00CF5566 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0479EA299D61DF00CF5566 /* ViewExtension.swift */; };
+		0A10651E2CC3E979002C8745 /* DeviceListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0479E8299D56A200CF5566 /* DeviceListItem.swift */; };
+		0A10651F2CC3E979002C8745 /* DeviceSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1C35232B60F32200BBE6C3 /* DeviceSelectionView.swift */; };
+		0A1065232CC3EA3A002C8745 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD8C702B6ACC6D00F83E75 /* Helper.swift */; };
+		0A1065242CC3EEDC002C8745 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7C07462B8BFDF700209877 /* CircularProgressView.swift */; };
+		0A1065252CC3EEDC002C8745 /* DiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9D71EE2B63AEA700618EA7 /* DiscoveryService.swift */; };
+		0A1065272CC3EEFC002C8745 /* DataRCT in Frameworks */ = {isa = PBXBuildFile; productRef = 0A1065262CC3EEFC002C8745 /* DataRCT */; };
+		0A1065282CC3EEFC002C8745 /* DataRCTFFI.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A5CFECB2B4894AD0004247E /* DataRCTFFI.xcframework */; };
+		0A10652B2CC533F9002C8745 /* BluetoothDisabledWarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A10652A2CC533EF002C8745 /* BluetoothDisabledWarningView.swift */; };
+		0A10652C2CC533F9002C8745 /* BluetoothDisabledWarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A10652A2CC533EF002C8745 /* BluetoothDisabledWarningView.swift */; };
+		0A10652E2CC53870002C8745 /* ReadyToReceiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A10652D2CC53870002C8745 /* ReadyToReceiveView.swift */; };
+		0A1065312CC55BCA002C8745 /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1065302CC55BCA002C8745 /* ConnectionRequestView.swift */; };
 		0A19E44B2B5C48E3007DB15A /* PulseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A19E44A2B5C48E3007DB15A /* PulseView.swift */; };
 		0A1C35242B60F32200BBE6C3 /* DeviceSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1C35232B60F32200BBE6C3 /* DeviceSelectionView.swift */; };
+		0A2686122CC5B74A0011A9FD /* MenuButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2686112CC5B74A0011A9FD /* MenuButtonView.swift */; };
 		0A5CFECC2B4894AD0004247E /* DataRCTFFI.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A5CFECB2B4894AD0004247E /* DataRCTFFI.xcframework */; };
+		0A5E3EE72CC59C7200AA2A27 /* DynamicNotchKit in Frameworks */ = {isa = PBXBuildFile; platformFilters = (macos, ); productRef = 0A5E3EE62CC59C7200AA2A27 /* DynamicNotchKit */; };
+		0A5E3F1D2CC5A09300AA2A27 /* MacShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 0A5E3F102CC5A09300AA2A27 /* MacShareExtension.appex */; platformFilters = (macos, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		0A5E3F252CC5A11F00AA2A27 /* DeviceListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0479E8299D56A200CF5566 /* DeviceListItem.swift */; };
+		0A5E3F262CC5A11F00AA2A27 /* DeviceSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1C35232B60F32200BBE6C3 /* DeviceSelectionView.swift */; };
+		0A5E3F272CC5A11F00AA2A27 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7C07462B8BFDF700209877 /* CircularProgressView.swift */; };
+		0A5E3F282CC5A11F00AA2A27 /* BluetoothDisabledWarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A10652A2CC533EF002C8745 /* BluetoothDisabledWarningView.swift */; };
+		0A5E3F292CC5A11F00AA2A27 /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1065302CC55BCA002C8745 /* ConnectionRequestView.swift */; };
+		0A5E3F2A2CC5A11F00AA2A27 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD8C702B6ACC6D00F83E75 /* Helper.swift */; };
+		0A5E3F2B2CC5A11F00AA2A27 /* DiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9D71EE2B63AEA700618EA7 /* DiscoveryService.swift */; };
+		0A5E3F2E2CC5A12400AA2A27 /* DataRCT in Frameworks */ = {isa = PBXBuildFile; productRef = 0A5E3F2D2CC5A12400AA2A27 /* DataRCT */; };
+		0A5E3F302CC5A12400AA2A27 /* DynamicNotchKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0A5E3F2F2CC5A12400AA2A27 /* DynamicNotchKit */; };
+		0A5E3F312CC5A12400AA2A27 /* DataRCTFFI.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A5CFECB2B4894AD0004247E /* DataRCTFFI.xcframework */; };
+		0A69D4392CC3E3BF0066A19E /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 0A69D42F2CC3E3BF0066A19E /* ShareExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0A6C60C32A88D2AD003ADA7A /* IpHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6C60C22A88D2AD003ADA7A /* IpHelper.swift */; };
 		0A7C07472B8BFDF700209877 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7C07462B8BFDF700209877 /* CircularProgressView.swift */; };
 		0A87525E2B488F9000B07368 /* DataRCT in Frameworks */ = {isa = PBXBuildFile; productRef = 0A87525D2B488F9000B07368 /* DataRCT */; };
+		0A8D6CC42CC577AD00BD251F /* DynamicNotchKit in Frameworks */ = {isa = PBXBuildFile; platformFilters = (macos, ); productRef = 0A8D6CC32CC577AD00BD251F /* DynamicNotchKit */; };
 		0A98C7CD2B9A708E00BBD4C0 /* ContentView+mac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A98C7CC2B9A708E00BBD4C0 /* ContentView+mac.swift */; };
 		0A98C7CF2B9A722E00BBD4C0 /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A98C7CE2B9A722E00BBD4C0 /* VisualEffectView.swift */; };
-		0A9D71E82B6241BA00618EA7 /* DeviceInfoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9D71E72B6241BA00618EA7 /* DeviceInfoListViewModel.swift */; };
 		0A9D71EF2B63AEA700618EA7 /* DiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9D71EE2B63AEA700618EA7 /* DiscoveryService.swift */; };
 		0ACD8C6D2B6AC8CD00F83E75 /* ReceiveContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD8C6C2B6AC8CD00F83E75 /* ReceiveContentView.swift */; };
-		0ACD8C6F2B6ACB0800F83E75 /* ReceiveProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD8C6E2B6ACB0800F83E75 /* ReceiveProgress.swift */; };
 		0ACD8C712B6ACC6D00F83E75 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD8C702B6ACC6D00F83E75 /* Helper.swift */; };
 		0AEC7C18299BA2FA005BBB0E /* InterShareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC7C17299BA2FA005BBB0E /* InterShareApp.swift */; };
 		0AEC7C1A299BA2FA005BBB0E /* ContentView+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC7C19299BA2FA005BBB0E /* ContentView+iOS.swift */; };
 		0AEC7C1C299BA2FB005BBB0E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AEC7C1B299BA2FB005BBB0E /* Assets.xcassets */; };
 		0AEC7C20299BA2FB005BBB0E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AEC7C1F299BA2FB005BBB0E /* Preview Assets.xcassets */; };
-		0AEC7C33299CD2FA005BBB0E /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC7C32299CD2FA005BBB0E /* ContentViewModel.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		0A5E3F1B2CC5A09300AA2A27 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0AEC7C0C299BA2FA005BBB0E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0A5E3F0F2CC5A09300AA2A27;
+			remoteInfo = MacShareExtension;
+		};
+		0A69D4372CC3E3BF0066A19E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0AEC7C0C299BA2FA005BBB0E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0A69D42E2CC3E3BF0066A19E;
+			remoteInfo = ShareExtension;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
+		0A69D43A2CC3E3BF0066A19E /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				0A5E3F1D2CC5A09300AA2A27 /* MacShareExtension.appex in Embed Foundation Extensions */,
+				0A69D4392CC3E3BF0066A19E /* ShareExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0AF47D102B488E9100B5E7DF /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -45,18 +97,23 @@
 /* Begin PBXFileReference section */
 		0A0479E8299D56A200CF5566 /* DeviceListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListItem.swift; sourceTree = "<group>"; };
 		0A0479EA299D61DF00CF5566 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
+		0A10652A2CC533EF002C8745 /* BluetoothDisabledWarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothDisabledWarningView.swift; sourceTree = "<group>"; };
+		0A10652D2CC53870002C8745 /* ReadyToReceiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadyToReceiveView.swift; sourceTree = "<group>"; };
+		0A1065302CC55BCA002C8745 /* ConnectionRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestView.swift; sourceTree = "<group>"; };
 		0A19E44A2B5C48E3007DB15A /* PulseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseView.swift; sourceTree = "<group>"; };
 		0A1C35232B60F32200BBE6C3 /* DeviceSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSelectionView.swift; sourceTree = "<group>"; };
+		0A2686112CC5B74A0011A9FD /* MenuButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButtonView.swift; sourceTree = "<group>"; };
 		0A435E0A2A6F0F78008161DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		0A5CFECB2B4894AD0004247E /* DataRCTFFI.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DataRCTFFI.xcframework; path = ../../../data_rct/bindings/swift/DataRCTFFI.xcframework; sourceTree = "<group>"; };
+		0A5E3F102CC5A09300AA2A27 /* MacShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MacShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		0A69D42F2CC3E3BF0066A19E /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A6C60C22A88D2AD003ADA7A /* IpHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IpHelper.swift; sourceTree = "<group>"; };
 		0A7C07462B8BFDF700209877 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
+		0A8D6CC12CC5779000BD251F /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../../../DynamicNotchKit/Package.swift; sourceTree = "<group>"; };
 		0A98C7CC2B9A708E00BBD4C0 /* ContentView+mac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView+mac.swift"; sourceTree = "<group>"; };
 		0A98C7CE2B9A722E00BBD4C0 /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
-		0A9D71E72B6241BA00618EA7 /* DeviceInfoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoListViewModel.swift; sourceTree = "<group>"; };
 		0A9D71EE2B63AEA700618EA7 /* DiscoveryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryService.swift; sourceTree = "<group>"; };
 		0ACD8C6C2B6AC8CD00F83E75 /* ReceiveContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveContentView.swift; sourceTree = "<group>"; };
-		0ACD8C6E2B6ACB0800F83E75 /* ReceiveProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveProgress.swift; sourceTree = "<group>"; };
 		0ACD8C702B6ACC6D00F83E75 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		0AEC7C14299BA2FA005BBB0E /* InterShare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InterShare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AEC7C17299BA2FA005BBB0E /* InterShareApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterShareApp.swift; sourceTree = "<group>"; };
@@ -64,14 +121,75 @@
 		0AEC7C1B299BA2FB005BBB0E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0AEC7C1D299BA2FB005BBB0E /* InterShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InterShare.entitlements; sourceTree = "<group>"; };
 		0AEC7C1F299BA2FB005BBB0E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		0AEC7C32299CD2FA005BBB0E /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0A1065202CC3E979002C8745 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ContentViewModel.swift,
+				DeviceInfoListViewModel.swift,
+				ReceiveProgress.swift,
+			);
+			target = 0A69D42E2CC3E3BF0066A19E /* ShareExtension */;
+		};
+		0A5E3F1E2CC5A09300AA2A27 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 0A5E3F0F2CC5A09300AA2A27 /* MacShareExtension */;
+		};
+		0A5E3F2C2CC5A11F00AA2A27 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ContentViewModel.swift,
+				DeviceInfoListViewModel.swift,
+				ReceiveProgress.swift,
+			);
+			target = 0A5E3F0F2CC5A09300AA2A27 /* MacShareExtension */;
+		};
+		0A69D43D2CC3E3BF0066A19E /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 0A69D42E2CC3E3BF0066A19E /* ShareExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		0A5E3F112CC5A09300AA2A27 /* MacShareExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (0A5E3F1E2CC5A09300AA2A27 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = MacShareExtension; sourceTree = "<group>"; };
+		0A69D4302CC3E3BF0066A19E /* ShareExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (0A69D43D2CC3E3BF0066A19E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ShareExtension; sourceTree = "<group>"; };
+		0A69D4402CC3E7AD0066A19E /* ViewModels */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (0A1065202CC3E979002C8745 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 0A5E3F2C2CC5A11F00AA2A27 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ViewModels; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		0A5E3F0D2CC5A09300AA2A27 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A5E3F312CC5A12400AA2A27 /* DataRCTFFI.xcframework in Frameworks */,
+				0A5E3F302CC5A12400AA2A27 /* DynamicNotchKit in Frameworks */,
+				0A5E3F2E2CC5A12400AA2A27 /* DataRCT in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0A69D42C2CC3E3BF0066A19E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A1065282CC3EEFC002C8745 /* DataRCTFFI.xcframework in Frameworks */,
+				0A1065272CC3EEFC002C8745 /* DataRCT in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0AEC7C11299BA2FA005BBB0E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A5E3EE72CC59C7200AA2A27 /* DynamicNotchKit in Frameworks */,
+				0A8D6CC42CC577AD00BD251F /* DynamicNotchKit in Frameworks */,
 				0A5CFECC2B4894AD0004247E /* DataRCTFFI.xcframework in Frameworks */,
 				0A87525E2B488F9000B07368 /* DataRCT in Frameworks */,
 			);
@@ -80,11 +198,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A69D43F2CC3E7320066A19E /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				0A69D4402CC3E7AD0066A19E /* ViewModels */,
+				0A0479E8299D56A200CF5566 /* DeviceListItem.swift */,
+				0A1C35232B60F32200BBE6C3 /* DeviceSelectionView.swift */,
+				0A7C07462B8BFDF700209877 /* CircularProgressView.swift */,
+				0A10652A2CC533EF002C8745 /* BluetoothDisabledWarningView.swift */,
+				0A1065302CC55BCA002C8745 /* ConnectionRequestView.swift */,
+				0ACD8C702B6ACC6D00F83E75 /* Helper.swift */,
+				0A9D71E92B624E1800618EA7 /* Services */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 		0A98C7CA2B9A6FFA00BBD4C0 /* Mac */ = {
 			isa = PBXGroup;
 			children = (
 				0A98C7CC2B9A708E00BBD4C0 /* ContentView+mac.swift */,
 				0A98C7CE2B9A722E00BBD4C0 /* VisualEffectView.swift */,
+				0A2686112CC5B74A0011A9FD /* MenuButtonView.swift */,
 			);
 			path = Mac;
 			sourceTree = "<group>";
@@ -108,8 +242,11 @@
 		0AEC7C0B299BA2FA005BBB0E = {
 			isa = PBXGroup;
 			children = (
+				0A69D43F2CC3E7320066A19E /* Shared */,
 				0AEC7C28299BA385005BBB0E /* Packages */,
 				0AEC7C16299BA2FA005BBB0E /* InterShare */,
+				0A69D4302CC3E3BF0066A19E /* ShareExtension */,
+				0A5E3F112CC5A09300AA2A27 /* MacShareExtension */,
 				0AEC7C15299BA2FA005BBB0E /* Products */,
 				0AEC7C26299BA324005BBB0E /* Frameworks */,
 			);
@@ -119,6 +256,8 @@
 			isa = PBXGroup;
 			children = (
 				0AEC7C14299BA2FA005BBB0E /* InterShare.app */,
+				0A69D42F2CC3E3BF0066A19E /* ShareExtension.appex */,
+				0A5E3F102CC5A09300AA2A27 /* MacShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -126,9 +265,7 @@
 		0AEC7C16299BA2FA005BBB0E /* InterShare */ = {
 			isa = PBXGroup;
 			children = (
-				0A9D71E92B624E1800618EA7 /* Services */,
 				0A435E0A2A6F0F78008161DB /* Info.plist */,
-				0AEC7C31299CD2DF005BBB0E /* ViewModels */,
 				0AEC7C30299CD2D6005BBB0E /* Views */,
 				0AEC7C17299BA2FA005BBB0E /* InterShareApp.swift */,
 				0AEC7C1B299BA2FB005BBB0E /* Assets.xcassets */,
@@ -136,7 +273,6 @@
 				0AEC7C1E299BA2FB005BBB0E /* Preview Content */,
 				0A0479EA299D61DF00CF5566 /* ViewExtension.swift */,
 				0A6C60C22A88D2AD003ADA7A /* IpHelper.swift */,
-				0ACD8C702B6ACC6D00F83E75 /* Helper.swift */,
 			);
 			path = InterShare;
 			sourceTree = "<group>";
@@ -152,6 +288,7 @@
 		0AEC7C26299BA324005BBB0E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0A8D6CC12CC5779000BD251F /* Package.swift */,
 				0A5CFECB2B4894AD0004247E /* DataRCTFFI.xcframework */,
 			);
 			name = Frameworks;
@@ -169,28 +306,63 @@
 			children = (
 				0A98C7CB2B9A700D00BBD4C0 /* iOS */,
 				0A98C7CA2B9A6FFA00BBD4C0 /* Mac */,
-				0A0479E8299D56A200CF5566 /* DeviceListItem.swift */,
 				0A19E44A2B5C48E3007DB15A /* PulseView.swift */,
-				0A1C35232B60F32200BBE6C3 /* DeviceSelectionView.swift */,
 				0ACD8C6C2B6AC8CD00F83E75 /* ReceiveContentView.swift */,
-				0A7C07462B8BFDF700209877 /* CircularProgressView.swift */,
+				0A10652D2CC53870002C8745 /* ReadyToReceiveView.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		0AEC7C31299CD2DF005BBB0E /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				0AEC7C32299CD2FA005BBB0E /* ContentViewModel.swift */,
-				0A9D71E72B6241BA00618EA7 /* DeviceInfoListViewModel.swift */,
-				0ACD8C6E2B6ACB0800F83E75 /* ReceiveProgress.swift */,
-			);
-			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		0A5E3F0F2CC5A09300AA2A27 /* MacShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0A5E3F1F2CC5A09300AA2A27 /* Build configuration list for PBXNativeTarget "MacShareExtension" */;
+			buildPhases = (
+				0A5E3F0C2CC5A09300AA2A27 /* Sources */,
+				0A5E3F0D2CC5A09300AA2A27 /* Frameworks */,
+				0A5E3F0E2CC5A09300AA2A27 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				0A5E3F112CC5A09300AA2A27 /* MacShareExtension */,
+			);
+			name = MacShareExtension;
+			packageProductDependencies = (
+				0A5E3F2D2CC5A12400AA2A27 /* DataRCT */,
+				0A5E3F2F2CC5A12400AA2A27 /* DynamicNotchKit */,
+			);
+			productName = MacShareExtension;
+			productReference = 0A5E3F102CC5A09300AA2A27 /* MacShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		0A69D42E2CC3E3BF0066A19E /* ShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0A69D43E2CC3E3BF0066A19E /* Build configuration list for PBXNativeTarget "ShareExtension" */;
+			buildPhases = (
+				0A69D42B2CC3E3BF0066A19E /* Sources */,
+				0A69D42C2CC3E3BF0066A19E /* Frameworks */,
+				0A69D42D2CC3E3BF0066A19E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				0A69D4302CC3E3BF0066A19E /* ShareExtension */,
+			);
+			name = ShareExtension;
+			packageProductDependencies = (
+				0A1065262CC3EEFC002C8745 /* DataRCT */,
+			);
+			productName = ShareExtension;
+			productReference = 0A69D42F2CC3E3BF0066A19E /* ShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		0AEC7C13299BA2FA005BBB0E /* InterShare */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0AEC7C23299BA2FB005BBB0E /* Build configuration list for PBXNativeTarget "InterShare" */;
@@ -199,14 +371,22 @@
 				0AEC7C11299BA2FA005BBB0E /* Frameworks */,
 				0AEC7C12299BA2FA005BBB0E /* Resources */,
 				0AF47D102B488E9100B5E7DF /* Embed Frameworks */,
+				0A69D43A2CC3E3BF0066A19E /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				0A69D4382CC3E3BF0066A19E /* PBXTargetDependency */,
+				0A5E3F1C2CC5A09300AA2A27 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				0A69D4402CC3E7AD0066A19E /* ViewModels */,
 			);
 			name = InterShare;
 			packageProductDependencies = (
 				0A87525D2B488F9000B07368 /* DataRCT */,
+				0A8D6CC32CC577AD00BD251F /* DynamicNotchKit */,
+				0A5E3EE62CC59C7200AA2A27 /* DynamicNotchKit */,
 			);
 			productName = InterShare;
 			productReference = 0AEC7C14299BA2FA005BBB0E /* InterShare.app */;
@@ -219,9 +399,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1420;
+				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1420;
 				TargetAttributes = {
+					0A5E3F0F2CC5A09300AA2A27 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					0A69D42E2CC3E3BF0066A19E = {
+						CreatedOnToolsVersion = 16.0;
+					};
 					0AEC7C13299BA2FA005BBB0E = {
 						CreatedOnToolsVersion = 14.2;
 					};
@@ -238,17 +424,34 @@
 			mainGroup = 0AEC7C0B299BA2FA005BBB0E;
 			packageReferences = (
 				0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../../data_rct" */,
+				0A5E3EE52CC59C7200AA2A27 /* XCLocalSwiftPackageReference "../../../DynamicNotchKit" */,
 			);
 			productRefGroup = 0AEC7C15299BA2FA005BBB0E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				0AEC7C13299BA2FA005BBB0E /* InterShare */,
+				0A69D42E2CC3E3BF0066A19E /* ShareExtension */,
+				0A5E3F0F2CC5A09300AA2A27 /* MacShareExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0A5E3F0E2CC5A09300AA2A27 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0A69D42D2CC3E3BF0066A19E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0AEC7C12299BA2FA005BBB0E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -261,24 +464,52 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0A5E3F0C2CC5A09300AA2A27 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A5E3F252CC5A11F00AA2A27 /* DeviceListItem.swift in Sources */,
+				0A5E3F262CC5A11F00AA2A27 /* DeviceSelectionView.swift in Sources */,
+				0A5E3F272CC5A11F00AA2A27 /* CircularProgressView.swift in Sources */,
+				0A5E3F282CC5A11F00AA2A27 /* BluetoothDisabledWarningView.swift in Sources */,
+				0A5E3F292CC5A11F00AA2A27 /* ConnectionRequestView.swift in Sources */,
+				0A5E3F2A2CC5A11F00AA2A27 /* Helper.swift in Sources */,
+				0A5E3F2B2CC5A11F00AA2A27 /* DiscoveryService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0A69D42B2CC3E3BF0066A19E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A10652B2CC533F9002C8745 /* BluetoothDisabledWarningView.swift in Sources */,
+				0A1065242CC3EEDC002C8745 /* CircularProgressView.swift in Sources */,
+				0A1065252CC3EEDC002C8745 /* DiscoveryService.swift in Sources */,
+				0A1065232CC3EA3A002C8745 /* Helper.swift in Sources */,
+				0A10651E2CC3E979002C8745 /* DeviceListItem.swift in Sources */,
+				0A10651F2CC3E979002C8745 /* DeviceSelectionView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0AEC7C10299BA2FA005BBB0E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				0A1C35242B60F32200BBE6C3 /* DeviceSelectionView.swift in Sources */,
 				0AEC7C1A299BA2FA005BBB0E /* ContentView+iOS.swift in Sources */,
+				0A2686122CC5B74A0011A9FD /* MenuButtonView.swift in Sources */,
 				0AEC7C18299BA2FA005BBB0E /* InterShareApp.swift in Sources */,
 				0A0479E9299D56A200CF5566 /* DeviceListItem.swift in Sources */,
-				0AEC7C33299CD2FA005BBB0E /* ContentViewModel.swift in Sources */,
 				0A6C60C32A88D2AD003ADA7A /* IpHelper.swift in Sources */,
-				0A9D71E82B6241BA00618EA7 /* DeviceInfoListViewModel.swift in Sources */,
 				0A9D71EF2B63AEA700618EA7 /* DiscoveryService.swift in Sources */,
-				0ACD8C6F2B6ACB0800F83E75 /* ReceiveProgress.swift in Sources */,
 				0ACD8C6D2B6AC8CD00F83E75 /* ReceiveContentView.swift in Sources */,
 				0A7C07472B8BFDF700209877 /* CircularProgressView.swift in Sources */,
 				0A98C7CD2B9A708E00BBD4C0 /* ContentView+mac.swift in Sources */,
+				0A10652C2CC533F9002C8745 /* BluetoothDisabledWarningView.swift in Sources */,
 				0ACD8C712B6ACC6D00F83E75 /* Helper.swift in Sources */,
+				0A1065312CC55BCA002C8745 /* ConnectionRequestView.swift in Sources */,
 				0A98C7CF2B9A722E00BBD4C0 /* VisualEffectView.swift in Sources */,
+				0A10652E2CC53870002C8745 /* ReadyToReceiveView.swift in Sources */,
 				0A19E44B2B5C48E3007DB15A /* PulseView.swift in Sources */,
 				0A0479EB299D61DF00CF5566 /* ViewExtension.swift in Sources */,
 			);
@@ -286,7 +517,161 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		0A5E3F1C2CC5A09300AA2A27 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilters = (
+				macos,
+			);
+			target = 0A5E3F0F2CC5A09300AA2A27 /* MacShareExtension */;
+			targetProxy = 0A5E3F1B2CC5A09300AA2A27 /* PBXContainerItemProxy */;
+		};
+		0A69D4382CC3E3BF0066A19E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = 0A69D42E2CC3E3BF0066A19E /* ShareExtension */;
+			targetProxy = 0A69D4372CC3E3BF0066A19E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		0A5E3F202CC5A09300AA2A27 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_ENTITLEMENTS = MacShareExtension/MacShareExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PBYG8F53RH;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MacShareExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = InterShare;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.julian-baumann.InterShare.MacShareExtension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		0A5E3F212CC5A09300AA2A27 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_ENTITLEMENTS = MacShareExtension/MacShareExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PBYG8F53RH;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MacShareExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = InterShare;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.julian-baumann.InterShare.MacShareExtension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		0A69D43B2CC3E3BF0066A19E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PBYG8F53RH;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ShareExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ShareExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.julian-baumann.InterShare.ShareExtension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0A69D43C2CC3E3BF0066A19E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PBYG8F53RH;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ShareExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ShareExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.julian-baumann.InterShare.ShareExtension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		0AEC7C21299BA2FB005BBB0E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -414,7 +799,8 @@
 				INFOPLIST_KEY_CFBundleDisplayName = InterShare;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
-				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This App needs BLE";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "InterShare needs Bluetooth to find nearby devices";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Looking for local tcp Bonjour service";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -424,13 +810,13 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.julian-baumann.InterShare";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -460,7 +846,8 @@
 				INFOPLIST_KEY_CFBundleDisplayName = InterShare;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
-				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This App needs BLE";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "InterShare needs Bluetooth to find nearby devices";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Looking for local tcp Bonjour service";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -470,13 +857,13 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.julian-baumann.InterShare";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -491,6 +878,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0A5E3F1F2CC5A09300AA2A27 /* Build configuration list for PBXNativeTarget "MacShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0A5E3F202CC5A09300AA2A27 /* Debug */,
+				0A5E3F212CC5A09300AA2A27 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0A69D43E2CC3E3BF0066A19E /* Build configuration list for PBXNativeTarget "ShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0A69D43B2CC3E3BF0066A19E /* Debug */,
+				0A69D43C2CC3E3BF0066A19E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		0AEC7C0F299BA2FA005BBB0E /* Build configuration list for PBXProject "InterShare" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -512,6 +917,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		0A5E3EE52CC59C7200AA2A27 /* XCLocalSwiftPackageReference "../../../DynamicNotchKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../DynamicNotchKit;
+		};
 		0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../../data_rct" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../../data_rct;
@@ -519,9 +928,32 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0A1065262CC3EEFC002C8745 /* DataRCT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../../data_rct" */;
+			productName = DataRCT;
+		};
+		0A5E3EE62CC59C7200AA2A27 /* DynamicNotchKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DynamicNotchKit;
+		};
+		0A5E3F2D2CC5A12400AA2A27 /* DataRCT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../../data_rct" */;
+			productName = DataRCT;
+		};
+		0A5E3F2F2CC5A12400AA2A27 /* DynamicNotchKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0A5E3EE52CC59C7200AA2A27 /* XCLocalSwiftPackageReference "../../../DynamicNotchKit" */;
+			productName = DynamicNotchKit;
+		};
 		0A87525D2B488F9000B07368 /* DataRCT */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DataRCT;
+		};
+		0A8D6CC32CC577AD00BD251F /* DynamicNotchKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DynamicNotchKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

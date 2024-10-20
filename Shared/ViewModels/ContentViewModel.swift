@@ -8,11 +8,15 @@
 import DataRCT
 import PhotosUI
 import SwiftUI
+#if os(macOS)
+import DynamicNotchKit
+#endif
 
 class ContentViewModel: ObservableObject, NearbyServerDelegate {
     private var incomingThread: Thread?
+    let userDefaults = UserDefaults(suiteName: "group.com.julian-baumann.InterShare")!
     private var myDevice: Device?
-    private var temporaryDirectory: URL = FileManager.default.temporaryDirectory
+
 #if os(macOS)
     public var documentsDirectory = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask)[0]
 #else
@@ -22,7 +26,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     public var shouldDeleteSelectedFileAfterwards = false
 
     @Published public var advertisementEnabled = false
-    @Published public var isPoweredOn = false
+    @Published public var isPoweredOn = true
     @Published public var selectedFileURL: String?
     @Published public var showDeviceSelectionSheet = false
     @Published public var showConnectionRequestDialog = false
@@ -44,7 +48,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     @Published public var imageSelection: PhotosPickerItem? = nil {
         didSet {
             if let imageSelection {
-                getURL(item: imageSelection) { result in
+                getURL(photo: imageSelection) { result in
                     switch result {
                     case .success(let data):
                         self.shouldDeleteSelectedFileAfterwards = true
@@ -63,11 +67,15 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     }
     
     init() {
-        let deviceName = UserDefaults.standard.string(forKey: "deviceName")
+        let deviceName = userDefaults.string(forKey: "deviceName")
 
         guard let deviceName else {
             DispatchQueue.main.async {
+#if os(macOS)
+                self.showDeviceNamingAlertOnMac()
+#else
                 self.showDeviceNamingAlert = true
+#endif
             }
             return
         }
@@ -75,36 +83,41 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
         initializeServer(deviceName: deviceName)
     }
     
-    func getURL(item: PhotosPickerItem, completionHandler: @escaping (_ result: Result<URL, Error>) -> Void) {
-        item.loadTransferable(type: Data.self) { result in
-            switch result {
-            case .success(let data):
-                if let contentType = item.supportedContentTypes.first {
+#if os(macOS)
+    func showDeviceNamingAlertOnMac() {
+        let alert = NSAlert()
+        alert.messageText = "Name this device"
+        alert.informativeText = "Nearby devices will discover this device using this name, which must be at least three characters long."
+        alert.alertStyle = .informational
+        
+        // Add a text field for the device name
+        let textField = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
+        textField.placeholderString = "Device name"
+        textField.stringValue = deviceName
+        alert.accessoryView = textField
+        alert.addButton(withTitle: "Save")
 
-                    if let data = data {
-                        do {
-                            let url = self.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).\(contentType.preferredFilenameExtension ?? "")")
+        let response = alert.runModal()
 
-                            try data.write(to: url)
-                            completionHandler(.success(url))
-                        } catch {
-                            completionHandler(.failure(error))
-                        }
-                    }
-                }
-            case .failure(let failure):
-                completionHandler(.failure(failure))
+        if response == .alertFirstButtonReturn {
+            if (textField.stringValue.count < 3) {
+                showDeviceNamingAlertOnMac()
+                return
             }
+            
+            deviceName = textField.stringValue
+            saveName()
         }
     }
+#endif
     
     func initializeServer(deviceName: String) {
         self.deviceName = deviceName
-        var deviceId = UserDefaults.standard.string(forKey: "deviceIdentifier")
+        var deviceId = userDefaults.string(forKey: "deviceIdentifier")
         
         if deviceId == nil {
             deviceId = UUID().uuidString
-            UserDefaults.standard.set(deviceId, forKey: "deviceIdentifier")
+            userDefaults.set(deviceId, forKey: "deviceIdentifier")
         }
 
         var deviceType = DeviceType.unknown
@@ -139,7 +152,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
             return
         }
         
-        UserDefaults.standard.set(deviceName, forKey: "deviceName")
+        userDefaults.set(deviceName, forKey: "deviceName")
 
         if let nearbyServer, var myDevice {
             myDevice.name = deviceName
@@ -187,10 +200,21 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
             request.decline()
             return
         }
-
         DispatchQueue.main.async {
+#if os(iOS)
             self.currentConnectionRequest = request
             self.showConnectionRequestDialog = true
+#else
+            var dynamicNotch: DynamicNotch<ConnectionRequestView>?
+            
+            dynamicNotch = DynamicNotch {
+                ConnectionRequestView(connectionRequest: request, {
+                    dynamicNotch?.hide(ignoreMouse: true)
+                })
+            }
+            
+            dynamicNotch?.toggle()
+#endif
         }
     }
     

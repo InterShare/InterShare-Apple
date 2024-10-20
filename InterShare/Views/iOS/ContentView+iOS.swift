@@ -13,10 +13,10 @@ import NetworkExtension
 
 struct ContentView: View {
     @Environment(\.scenePhase) var scenePhase
-    @EnvironmentObject var discoveryService: DiscoveryService
     @ObservedObject var viewModel = ContentViewModel()
     @State private var animateGradient = true
     @State private var showFileImporter = false
+    @StateObject var discovery = DiscoveryService()
     
     init() {
         var titleFont = UIFont.preferredFont(forTextStyle: .largeTitle)
@@ -29,25 +29,6 @@ struct ContentView: View {
         )
 
         UINavigationBar.appearance().largeTitleTextAttributes = [.font: titleFont]
-
-        // TODO: remove test
-//        let configuration = NEHotspotConfiguration.init(ssid: "Nothing", passphrase: "password", isWEP: false)
-//        configuration.joinOnce = true
-//
-//        NEHotspotConfigurationManager.shared.apply(configuration) { (error) in
-//            if error != nil {
-//                if error?.localizedDescription == "already associated."
-//                {
-//                    print("Connected")
-//                }
-//                else{
-//                    print("No Connected")
-//                }
-//            }
-//            else {
-//                print("Connected")
-//            }
-//        }
     }
     
     var body: some View {
@@ -56,7 +37,6 @@ struct ContentView: View {
                 .frame(height: 300)
                 .hueRotation(.degrees(animateGradient ? 10 : 0))
                 .ignoresSafeArea()
-//                .opacity(viewModel.advertisementEnabled ? 0.3 : 0.0)
                 .animation(.easeInOut(duration: 2.0), value: viewModel.advertisementEnabled)
                 .onAppear {
                     withAnimation(.easeInOut(duration: 5.0).repeatForever(autoreverses: true)) {
@@ -83,17 +63,27 @@ struct ContentView: View {
                     .controlSize(.mini)
                     .buttonBorderShape(.capsule)
                     .lineLimit(1)
+                    .disabled(!viewModel.isPoweredOn)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 15)
                 
+                if (!viewModel.isPoweredOn) {
+                    Spacer()
+                    BluetoothDisabledWarningView()
+                }
+                
                 Spacer()
 
                 VStack {
+                    if (viewModel.isPoweredOn) {
+                        ReadyToReceiveView()
+                    }
+                    
                     Text("Share")
                         .opacity(0.7)
                         .bold()
-                        .padding()
+                        .padding(.bottom)
                     
                     HStack {
                         PhotosPicker(
@@ -103,6 +93,7 @@ struct ContentView: View {
                                     .padding(.vertical, 10)
                                     .frame(maxWidth: .infinity)
                         }
+                        .disabled(!viewModel.isPoweredOn)
                         .buttonStyle(.borderedProminent)
                         .buttonBorderShape(.capsule)
                         .tint(Color("ButtonTint"))
@@ -115,6 +106,7 @@ struct ContentView: View {
                                 .padding(.vertical, 10)
                                 .frame(maxWidth: .infinity)
                         }
+                        .disabled(!viewModel.isPoweredOn)
                         .buttonStyle(.borderedProminent)
                         .buttonBorderShape(.capsule)
                         .tint(Color("ButtonTint"))
@@ -126,7 +118,7 @@ struct ContentView: View {
                                 let fileUrl = fileUrls[0]
                                 let _ = fileUrl.startAccessingSecurityScopedResource()
                                 viewModel.selectedFileURL = fileUrl.path
-                                discoveryService.resetProgress()
+//                                discoveryService.resetProgress()
                                 viewModel.showDeviceSelectionSheet = true
                             case .failure(let error):
                                 print(error)
@@ -182,7 +174,6 @@ struct ContentView: View {
                     }.start()
                     
                     DispatchQueue.main.async {
-                        print("show dialog")
                         viewModel.showReceivingDialog = true
                     }
                 }
@@ -199,10 +190,14 @@ struct ContentView: View {
                 if let nearbyServer = viewModel.nearbyServer,
                    let selectedImageURL = viewModel.selectedFileURL {
                         DeviceSelectionView(nearbyServer: nearbyServer, imageURL: selectedImageURL)
-                            .environmentObject(discoveryService)
+                            .padding(.top, 10)
+                            .environmentObject(discovery)
                             .presentationCornerRadius(30)
                             .presentationBackground(.regularMaterial)
                             .presentationDetents([ .medium, .large])
+                            .onDisappear {
+                                discovery.close()
+                            }
                 }
             }
             

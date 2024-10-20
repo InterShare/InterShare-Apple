@@ -10,6 +10,7 @@ import SwiftUI
 struct CircularProgressView: View {
     public var progress: Double
     public var color: Color
+    public var thickness: CGFloat = 3
     
     var body: some View {
         Circle()
@@ -17,18 +18,13 @@ struct CircularProgressView: View {
             .stroke(
                 color,
                 style: StrokeStyle(
-                    lineWidth: 3,
+                    lineWidth: thickness,
                     lineCap: .round
                 )
             )
             .rotationEffect(.degrees(-90))
             .animation(.easeOut, value: progress)
             .animation(.easeOut, value: color)
-        #if os(macOS)
-            .frame(width: 55, height: 55)
-        #else
-            .frame(width: 70, height: 70)
-        #endif
     }
 }
 

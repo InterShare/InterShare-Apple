@@ -23,53 +23,64 @@ struct DeviceSelectionView: View {
     
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: adaptiveColumns, spacing: 15) {
-                ForEach(discoveryService.discoveredDevices, id: \.id) { device in
-                    Button(action: {
-                        viewModel.send(device: device, progress: discoveryService.deviceSendProgress[device.id]!)
-                    }) {
-                        DeviceInfoListView(deviceInfo: device, progress: discoveryService.deviceSendProgress[device.id]!)
+            if (discoveryService.bluetoothEnabled) {
+                LazyVGrid(columns: adaptiveColumns, alignment: .leading, spacing: 15) {
+                    ForEach(discoveryService.discoveredDevices, id: \.id) { device in
+                        Button(action: {
+                            viewModel.send(device: device, progress: discoveryService.deviceSendProgress[device.id]!)
+                        }) {
+                            DeviceInfoListView(deviceInfo: device, progress: discoveryService.deviceSendProgress[device.id]!)
+                        }
+                        .frame(maxHeight: .infinity, alignment: .top)
+    #if os(macOS)
+                        .buttonStyle(.plain)
+    #endif
                     }
-#if os(macOS)
-                    .buttonStyle(.plain)
-#endif
                 }
+                .padding()
+            } else {
+                BluetoothDisabledWarningView()
             }
-            .padding()
         }
-        .clipped()
+        .onAppear {
+            discoveryService.startScan()
+        }
         .frame(maxHeight: .infinity)
-        .padding(.top, 10)
         .overlay(alignment: .bottom) {
-            VStack(spacing: 8) {
-                HStack() {
-                    ProgressView()
-                    Text("Looking for neaby devices")
+            HStack() {
+                Image(systemName: "eye.slash.fill")
+                    .symbolRenderingMode(.hierarchical)
+                VStack {
+                    Text("Don't see the right device?")
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .bold()
+                        .padding(.bottom, 0)
+                        .opacity(0.7)
+                    
+                    Text("Make sure the receiver has the InterShare app open on their device.")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top, 0)
                         .opacity(0.6)
                 }
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(.thinMaterial)
+            .background(.regularMaterial)
             .cornerRadius(15)
-            .shadow(radius: 10)
             .padding()
+            
+#if os(iOS)
             .safeAreaPadding(.vertical)
+#endif
         }
-        
+        .onDisappear {
+            discoveryService.close()
+        }
         .scrollContentBackground(.hidden)
         .navigationTitle("InterShare a copy")
 #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
 #endif
-        .toolbar(content: {
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") {
-                    dismiss()
-                }
-            }
-        })
     }
 }
 
