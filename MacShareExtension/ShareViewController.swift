@@ -23,7 +23,7 @@ class ShareViewController: NSViewController, NearbyServerDelegate {
     }
     
     func initializeNearbyServer() -> NearbyServer? {
-        let userDefaults = UserDefaults(suiteName: "group.com.julian-baumann.InterShare")!
+        let userDefaults = UserDefaults(suiteName: "PBYG8F53RH.com.julian-baumann.InterShare")!
         let deviceName = userDefaults.string(forKey: "deviceName")
         let deviceId = userDefaults.string(forKey: "deviceIdentifier")
         

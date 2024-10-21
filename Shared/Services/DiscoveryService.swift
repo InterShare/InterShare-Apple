@@ -22,7 +22,7 @@ class DiscoveryService: ObservableObject, DiscoveryDelegate {
 
     @Published public var discoveredDevices: [Device] = []
     @Published public var deviceSendProgress: [String: SendProgress] = [:]
-    @Published public var bluetoothEnabled = false
+    @Published public var bluetoothEnabled = true
     
     private func startInternalScan() {
         if (shouldStartScan && bluetoothAlreadyInitialized && !scanning) {

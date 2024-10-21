@@ -14,14 +14,16 @@ import DynamicNotchKit
 
 class ContentViewModel: ObservableObject, NearbyServerDelegate {
     private var incomingThread: Thread?
-    let userDefaults = UserDefaults(suiteName: "group.com.julian-baumann.InterShare")!
     private var myDevice: Device?
 
 #if os(macOS)
+    let userDefaults = UserDefaults(suiteName: "PBYG8F53RH.com.julian-baumann.InterShare")!
     public var documentsDirectory = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask)[0]
 #else
+    let userDefaults = UserDefaults(suiteName: "group.com.julian-baumann.InterShare")!
     public var documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
 #endif
+
     public var nearbyServer: NearbyServer?
     public var shouldDeleteSelectedFileAfterwards = false
 
@@ -80,7 +82,9 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
             return
         }
         
-        initializeServer(deviceName: deviceName)
+        Task {
+            await initializeServer(deviceName: deviceName)
+        }
     }
     
 #if os(macOS)
@@ -111,9 +115,15 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     }
 #endif
     
-    func initializeServer(deviceName: String) {
+    func initializeServer(deviceName: String) async {
         self.deviceName = deviceName
         var deviceId = userDefaults.string(forKey: "deviceIdentifier")
+        let askedForLocalNetworkPermission = userDefaults.bool(forKey: "askedForLocalNetworkPermission")
+        
+        if (askedForLocalNetworkPermission == false) {
+            let _ = await LocalNetworkAuthorization().requestAuthorization()
+            userDefaults.set(true, forKey: "askedForLocalNetworkPermission")
+        }
         
         if deviceId == nil {
             deviceId = UUID().uuidString
@@ -123,14 +133,14 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
         var deviceType = DeviceType.unknown
         
 #if os(iOS)
-        let idiom = UIDevice.current.userInterfaceIdiom
-        
+        let idiom = await UIDevice.current.userInterfaceIdiom
+
         if idiom == .pad {
             deviceType = .tablet
         } else if idiom == .phone {
             deviceType = .mobile
         } else if idiom == .mac {
-            deviceType = .mobile
+            deviceType = .desktop
         }
 #else
         deviceType = .desktop
@@ -142,9 +152,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
             deviceType: deviceType.rawValue
         )
         
-        let storageURL = documentsDirectory.path
-        
-        nearbyServer = NearbyServer(myDevice: myDevice!, storage: storageURL, delegate: self)
+        nearbyServer = NearbyServer(myDevice: myDevice!, storage: documentsDirectory.path, delegate: self)
     }
     
     public func saveName() {
@@ -158,7 +166,9 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
             myDevice.name = deviceName
             nearbyServer.changeDevice(myDevice)
         } else {
-            initializeServer(deviceName: deviceName)
+            Task {
+                await initializeServer(deviceName: deviceName)
+            }
         }
     }
 

@@ -4,7 +4,8 @@
 <dict>
 	<key>NSBonjourServices</key>
 	<array>
-		<string>_data-rct._tcp.local.</string>
+		<string>_bonjour._tcp</string>
+		<string>_lnp._tcp.</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
