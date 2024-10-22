@@ -5,7 +5,7 @@
 //  Created by Julian Baumann on 15.02.23.
 //
 
-import DataRCT
+import InterShareKit
 import PhotosUI
 import SwiftUI
 #if os(macOS)
@@ -120,6 +120,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
         var deviceId = userDefaults.string(forKey: "deviceIdentifier")
         let askedForLocalNetworkPermission = userDefaults.bool(forKey: "askedForLocalNetworkPermission")
         
+//         Asking for local network permissions beforehand, so it also works in the share extension.
         if (askedForLocalNetworkPermission == false) {
             let _ = await LocalNetworkAuthorization().requestAuthorization()
             userDefaults.set(true, forKey: "askedForLocalNetworkPermission")

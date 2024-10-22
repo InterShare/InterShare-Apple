@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import DataRCT
+import InterShareKit
 
 struct DeviceSelectionView: View {
     @ObservedObject var viewModel: DeviceInfoListViewModel

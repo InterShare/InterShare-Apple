@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-import DataRCT
+import InterShareKit
 
 struct DeviceInfoListView: View {
     @State public var deviceInfo: Device

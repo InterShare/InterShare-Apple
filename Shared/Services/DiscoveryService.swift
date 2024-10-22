@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import DataRCT
+import InterShareKit
 #if os(iOS)
 import UIKit
 #endif
@@ -69,7 +69,6 @@ class DiscoveryService: ObservableObject, DiscoveryDelegate {
     }
 
     func deviceAdded(value: Device) {
-
         DispatchQueue.main.async {
             self.deviceSendProgress[value.id] = SendProgress()
             let indexOfExisting = self.discoveredDevices.firstIndex(where: { device in device.id == value.id }) ?? -1

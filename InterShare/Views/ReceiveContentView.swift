@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import DataRCT
+import InterShareKit
 
 struct ReceiveContentView: View {
     @Environment(\.dismiss) var dismiss

@@ -7,7 +7,7 @@
 
 #if os(iOS)
 import SwiftUI
-import DataRCT
+import InterShareKit
 import PhotosUI
 import NetworkExtension
 

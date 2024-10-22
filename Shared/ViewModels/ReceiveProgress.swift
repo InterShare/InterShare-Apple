@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import DataRCT
+import InterShareKit
 
 class ReceiveProgress: ObservableObject, ReceiveProgressDelegate {
     @Published var state: ReceiveProgressState = .unknown

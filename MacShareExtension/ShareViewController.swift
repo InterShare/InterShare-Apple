@@ -6,7 +6,7 @@
 //
 
 import Cocoa
-import DataRCT
+import InterShareKit
 import SwiftUI
 
 class ShareViewController: NSViewController, NearbyServerDelegate {
@@ -14,11 +14,11 @@ class ShareViewController: NSViewController, NearbyServerDelegate {
     
     private var discovery = DiscoveryService()
     
-    func nearbyServerDidUpdateState(state: DataRCT.BluetoothState) {
+    func nearbyServerDidUpdateState(state: InterShareKit.BluetoothState) {
         
     }
     
-    func receivedConnectionRequest(request: DataRCT.ConnectionRequest) {
+    func receivedConnectionRequest(request: InterShareKit.ConnectionRequest) {
         fatalError("WTF did you do. It should be improssible to receive a connection request in Share Extension")
     }
     
