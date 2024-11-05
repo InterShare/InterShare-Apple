@@ -17,8 +17,8 @@ struct DeviceSelectionView: View {
         GridItem(.adaptive(minimum: 70))
     ]
     
-    init(nearbyServer: NearbyServer, imageURL: String) {
-        self.viewModel = DeviceInfoListViewModel(nearbyServer: nearbyServer, imageURL: imageURL)
+    init(nearbyServer: NearbyServer, urls: [String]) {
+        self.viewModel = DeviceInfoListViewModel(nearbyServer: nearbyServer, urls: urls)
     }
     
     var body: some View {
@@ -89,13 +89,13 @@ struct DeviceSelectionView: View {
     }
     .sheet(isPresented: .constant(true), onDismiss: {}) {
         if #available(macOS 13.3, *) {
-            DeviceSelectionView(nearbyServer: NearbyServer(myDevice: Device(id: "", name: "", deviceType: 0), storage: "", delegate: ContentViewModel()), imageURL: "")
+            DeviceSelectionView(nearbyServer: NearbyServer(myDevice: Device(id: "", name: "", deviceType: 0), storage: "", delegate: ContentViewModel()), urls: [""])
                 .environmentObject(DiscoveryService())
                 .presentationCornerRadius(20)
                 .presentationBackground(.regularMaterial)
                 .presentationDetents([ .medium, .large])
         } else {
-            DeviceSelectionView(nearbyServer: NearbyServer(myDevice: Device(id: "", name: "", deviceType: 0), storage: "", delegate: ContentViewModel()), imageURL: "")
+            DeviceSelectionView(nearbyServer: NearbyServer(myDevice: Device(id: "", name: "", deviceType: 0), storage: "", delegate: ContentViewModel()), urls: [""])
                 .environmentObject(DiscoveryService())
                 .presentationDetents([ .medium, .large])
         }

@@ -11,7 +11,7 @@ import InterShareKit
 struct ShareSheetView: View {
     @EnvironmentObject var discovery: DiscoveryService
     public var nearbyServer: NearbyServer
-    public var imageURL: String
+    public var urls: [String]
     public var close: () -> Void
     
     var body: some View {
@@ -23,7 +23,7 @@ struct ShareSheetView: View {
             Divider()
                 .padding(0)
             
-            DeviceSelectionView(nearbyServer: nearbyServer, imageURL: imageURL)
+            DeviceSelectionView(nearbyServer: nearbyServer, urls: urls)
                 .environmentObject(discovery)
             
             Divider()

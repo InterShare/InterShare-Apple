@@ -39,6 +39,8 @@ struct DeviceInfoListView: View {
             break
         case .connectionMediumUpdate(medium: _):
             break
+        case .compressing:
+            return .cyan
         case .transferring(progress: _):
             return .purple
         case .cancelled:
@@ -50,6 +52,31 @@ struct DeviceInfoListView: View {
         }
         
         return Color(red: 0, green: 0, blue: 0, opacity: 0.0)
+    }
+    
+    func getText(_ progress: SendProgress) -> String {
+        switch(progress.state) {
+        case .unknown:
+            break
+        case .connecting:
+            return "Connecting"
+        case .requesting:
+            return "Requesting"
+        case .connectionMediumUpdate(medium: _):
+            break
+        case .compressing:
+            return "Compressing"
+        case .transferring(progress: _):
+            return "Sending"
+        case .cancelled:
+            return "Cancelled"
+        case .finished:
+            return "Finished"
+        case .declined:
+            return "Declined"
+        }
+        
+        return ""
     }
     
     var body: some View {
@@ -81,9 +108,9 @@ struct DeviceInfoListView: View {
                 )
 #if os(macOS)
                 .frame(width: 55, height: 55)
-            #else
+#else
                 .frame(width: 70, height: 70)
-            #endif
+#endif
                 
                 .overlay(Group {
                     ZStack {
@@ -102,7 +129,7 @@ struct DeviceInfoListView: View {
                     }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                 })
                 
-                if progress.state == .requesting || progress.state == .connecting {
+                if progress.state == .requesting || progress.state == .connecting || progress.state == .compressing {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
                     #if os(macOS)
@@ -124,19 +151,20 @@ struct DeviceInfoListView: View {
             
             Text(deviceInfo.name)
                 .lineLimit(2)
+                .frame(alignment: .center)
                 .font(.system(size: 14, weight: .regular, design: .rounded))
                 .opacity(0.8)
                 .foregroundColor(.primary)
                 .frame(maxWidth: 90)
                 .truncationMode(.tail)
             
-//            Text(getDeviceType())
-//                .lineLimit(1)
-//                .font(.system(size: 13, weight: .regular, design: .rounded))
-//                .opacity(0.5)
-//                .foregroundColor(.primary)
-//                .frame(maxWidth: 90)
-//                .truncationMode(.tail)
+            Text(getText(progress))
+                .lineLimit(1)
+                .font(.system(size: 10, weight: .regular, design: .rounded))
+                .opacity(0.4)
+                .foregroundColor(.primary)
+                .frame(maxWidth: 90)
+                .truncationMode(.tail)
         }
     }
 }

@@ -34,6 +34,8 @@ struct ConnectionRequestView: View {
             return .green
         case .handshake:
             return .purple
+        case .extracting:
+            return .purple
         }
         
         return Color(red: 0, green: 0, blue: 0, opacity: 0.0)
@@ -49,6 +51,8 @@ struct ConnectionRequestView: View {
                                 if case .receiving(let progress) = receiveProgress.state {
                                     progress
                                 } else if receiveProgress.state == .finished {
+                                    1.0
+                                } else if receiveProgress.state == .extracting {
                                     1.0
                                 } else if receiveProgress.state == .cancelled {
                                     1.0
@@ -69,11 +73,30 @@ struct ConnectionRequestView: View {
                     .padding()
                     
                     VStack(alignment: .leading) {
-//                        Text("Receiving")
-//                            .frame(maxWidth: .infinity, alignment: .leading)
-//                            .font(.system(size: 16))
-//                            .bold()
-
+                        if case .receiving(_) = receiveProgress.state {
+                            Text("Receiving")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .font(.system(size: 16))
+                                .bold()
+                        } else if receiveProgress.state == .extracting {
+                            Text("Extracting")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .font(.system(size: 16))
+                                .bold()
+                        } else if receiveProgress.state == .finished {
+                            Text("Finished")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .font(.system(size: 16))
+                                .foregroundStyle(.green)
+                                .bold()
+                        } else if receiveProgress.state == .cancelled {
+                            Text("Cancelled")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .font(.system(size: 16))
+                                .foregroundStyle(.red)
+                                .bold()
+                        }
+                        
                         Button("Cancel") {
                             Task {
                                 await connectionRequest?.cancel()
@@ -90,8 +113,14 @@ struct ConnectionRequestView: View {
                         .frame(width: 50, height: 50)
                     
                     VStack() {
-                        Text("\(connectionRequest?.getSender().name ?? "Unknown") wants to send you \(connectionRequest?.getFileTransferIntent()?.fileName ?? "")")
-                            .fixedSize(horizontal: false, vertical: true)
+                        if (connectionRequest?.getFileTransferIntent()?.fileCount == 1) {
+                            Text("\(connectionRequest?.getSender().name ?? "Unknown") wants to send you \(connectionRequest?.getFileTransferIntent()?.fileName ?? "")")
+                                .fixedSize(horizontal: false, vertical: true)
+                        } else {
+                            Text("\(connectionRequest?.getSender().name ?? "Unknown") wants to send you \(connectionRequest?.getFileTransferIntent()?.fileCount.description ?? "some") files")
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        
                     }
                 }
                 
@@ -111,7 +140,7 @@ struct ConnectionRequestView: View {
                         showProgress = true
                         
                         withAnimation(Animation.timingCurve(0.16, 1, 0.3, 1, duration: 0.7)) {
-                            dynamicWidth = 180
+                            dynamicWidth = 190
                         }
                     }
                         .buttonStyle(.bordered)

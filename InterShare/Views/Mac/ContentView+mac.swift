@@ -7,6 +7,7 @@
 #if os(macOS)
 
 import SwiftUI
+import AppKit
 
 struct CustomButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
@@ -42,17 +43,38 @@ struct ContentView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
+            Text("InterShare")
+                .bold()
+                .opacity(0.5)
+            
+            Divider()
+            
+            VStack(spacing: 0) {
+                MenuButtonView("Visible to Everyone", icon: "eye.fill", isActivated: $viewModel.advertisementEnabled, hightlightColor: .gray.opacity(0.2)) {
+                    viewModel.advertisementEnabled = true
+                    viewModel.changeAdvertisementState()
+                }
+                
+                MenuButtonView("Receiving Off", icon: "eye.slash.fill", isActivated: !$viewModel.advertisementEnabled, hightlightColor: .gray.opacity(0.2)) {
+                    viewModel.advertisementEnabled = false
+                    viewModel.changeAdvertisementState()
+                }
+            }
+            
+            Divider()
             
             HStack {
-                Text("Visible as:")
+                Text("Device name:")
                     .opacity(0.5)
                 
                 Button(action: { viewModel.showDeviceNamingAlertOnMac() }) {
                     Text(viewModel.deviceName)
+                        .lineLimit(1)
                 }
                 .buttonStyle(.link)
             }
-            .padding(5)
+            .padding(.horizontal, 5)
+            .padding(.vertical, 2)
             
             Divider()
             
@@ -62,8 +84,6 @@ struct ContentView: View {
             
         }
         .padding(8)
-//        .frame(minWidth: 330, maxWidth: 330, minHeight: 150, maxHeight: 150)
-        .background(VisualEffectView().ignoresSafeArea())
 
         .alert("Name this device",
                isPresented: $viewModel.showDeviceNamingAlert,

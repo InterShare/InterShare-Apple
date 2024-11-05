@@ -16,7 +16,6 @@ struct ContentView: View {
     @ObservedObject var viewModel = ContentViewModel()
     @State private var animateGradient = true
     @State private var showFileImporter = false
-    @StateObject var discovery = DiscoveryService()
     
     init() {
         var titleFont = UIFont.preferredFont(forTextStyle: .largeTitle)
@@ -29,6 +28,14 @@ struct ContentView: View {
         )
 
         UINavigationBar.appearance().largeTitleTextAttributes = [.font: titleFont]
+    }
+    
+    func getRequestText() -> String {
+        if (viewModel.currentConnectionRequest?.getFileTransferIntent()?.fileCount == 1) {
+            return (viewModel.currentConnectionRequest?.getSender().name ?? "Unknown") + " wants to send you a file (\(toHumanReadableSize(bytes: viewModel.currentConnectionRequest?.getFileTransferIntent()?.fileSize)))"
+        }
+        
+        return (viewModel.currentConnectionRequest?.getSender().name ?? "Unknown") + " wants to send you \(viewModel.currentConnectionRequest?.getFileTransferIntent()?.fileCount ?? 0) files."
     }
     
     var body: some View {
@@ -88,7 +95,8 @@ struct ContentView: View {
                     HStack {
                         PhotosPicker(
                             selection: $viewModel.imageSelection,
-                            photoLibrary: .shared()) {
+                            photoLibrary: .shared()
+                        ) {
                             Text("Image or Video")
                                     .padding(.vertical, 10)
                                     .frame(maxWidth: .infinity)
@@ -111,14 +119,17 @@ struct ContentView: View {
                         .buttonBorderShape(.capsule)
                         .tint(Color("ButtonTint"))
                         .foregroundStyle(Color("ButtonTextColor"))
-                        .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.item], allowsMultipleSelection: false, onCompletion: { results in
+                        .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.item], allowsMultipleSelection: true, onCompletion: { results in
                             switch results {
                             case .success(let fileUrls):
+                                viewModel.selectedFileURLs = []
+
+                                for fileUrl in fileUrls {
+                                    viewModel.selectedFileURLs.append(fileUrl.path)
+                                    let _ = fileUrl.startAccessingSecurityScopedResource()
+                                }
+                                
                                 viewModel.shouldDeleteSelectedFileAfterwards = false
-                                let fileUrl = fileUrls[0]
-                                let _ = fileUrl.startAccessingSecurityScopedResource()
-                                viewModel.selectedFileURL = fileUrl.path
-//                                discoveryService.resetProgress()
                                 viewModel.showDeviceSelectionSheet = true
                             case .failure(let error):
                                 print(error)
@@ -155,22 +166,21 @@ struct ContentView: View {
                 })
                 .disabled(viewModel.namingSaveButtonDisabled)
             }, message: {
-                Text("Nearby devices will discover this device using this name, which must be at least three characters long.")
+                Text("Others will discover this device by this name")
                     .multilineTextAlignment(.center)
             })
             
             .alert(
-                (viewModel.currentConnectionRequest?.getSender().name ?? "Unknown") + " wants to send you a file (\(toHumanReadableSize(bytes: viewModel.currentConnectionRequest?.getFileTransferIntent()?.fileSize)))",
+                getRequestText(),
                 isPresented: $viewModel.showConnectionRequestDialog,
                 presenting: viewModel.currentConnectionRequest
             ) { request in
                 Button("Accept") {
                     viewModel.receiveProgress = ReceiveProgress()
                     request.setProgressDelegate(delegate: viewModel.receiveProgress!)
-                    
 
                     Thread {
-                        request.accept()
+                        let _ = request.accept()
                     }.start()
                     
                     DispatchQueue.main.async {
@@ -183,21 +193,26 @@ struct ContentView: View {
                     Text("Decline")
                 }
             } message: { request in
-                Text("\"\(request.getFileTransferIntent()?.fileName ?? "")\"")
+                if (request.getFileTransferIntent()?.fileCount == 1) {
+                    Text("\"\(request.getFileTransferIntent()?.fileName ?? "")\"")
+                } else {
+                    Text(toHumanReadableSize(bytes: viewModel.currentConnectionRequest?.getFileTransferIntent()?.fileSize))
+                }
             }
             
             .sheet(isPresented: $viewModel.showDeviceSelectionSheet, onDismiss: viewModel.onDeviceListSheetDismissed) {
-                if let nearbyServer = viewModel.nearbyServer,
-                   let selectedImageURL = viewModel.selectedFileURL {
-                        DeviceSelectionView(nearbyServer: nearbyServer, imageURL: selectedImageURL)
-                            .padding(.top, 10)
-                            .environmentObject(discovery)
-                            .presentationCornerRadius(30)
-                            .presentationBackground(.regularMaterial)
-                            .presentationDetents([ .medium, .large])
-                            .onDisappear {
-                                discovery.close()
-                            }
+                if let nearbyServer = viewModel.nearbyServer {
+                    let discovery = DiscoveryService()
+
+                    DeviceSelectionView(nearbyServer: nearbyServer, urls: viewModel.selectedFileURLs)
+                        .padding(.top, 10)
+                        .environmentObject(discovery)
+                        .presentationCornerRadius(30)
+                        .presentationBackground(.regularMaterial)
+                        .presentationDetents([ .medium, .large])
+                        .onDisappear {
+                            discovery.close()
+                        }
                 }
             }
             
@@ -221,7 +236,6 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             ContentView()
-                .environmentObject(DiscoveryService())
         }
     }
 }

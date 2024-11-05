@@ -58,7 +58,7 @@ class ShareViewController: NSViewController, NearbyServerDelegate {
         return NearbyServer(myDevice: myDevice, storage: storageURL, delegate: self)
     }
     
-    func buildView(url: String) {
+    func buildView(urls: [String]) {
         self.view = NSView(frame: NSMakeRect(0, 0, 500, 400))
                 
         guard let nearbyServer = initializeNearbyServer() else {
@@ -67,8 +67,7 @@ class ShareViewController: NSViewController, NearbyServerDelegate {
         }
 
         DispatchQueue.main.async {
-            print(url)
-            let swiftUIView = ShareSheetView(nearbyServer: nearbyServer, imageURL: url, close: { self.cancel() })
+            let swiftUIView = ShareSheetView(nearbyServer: nearbyServer, urls: urls, close: { self.cancel() })
                 .environmentObject(self.discovery)
             
             let hostingView = NSHostingView(rootView: swiftUIView)
@@ -86,24 +85,32 @@ class ShareViewController: NSViewController, NearbyServerDelegate {
     }
 
     override func loadView() {
-        let item = self.extensionContext!.inputItems[0] as! NSExtensionItem
-        
-        guard let attachment = item.attachments?.first else {
+        guard let extensionItem = extensionContext?.inputItems.first as? NSExtensionItem else {
             return
         }
         
-        getURL(item: attachment) { result in
-            switch result {
-            case .success(let data):
-                if let unescapedURLString = data.path().removingPercentEncoding {
-                    self.buildView(url: unescapedURLString)
-                } else {
-                    print("Failed to unescape the URL.")
+        Task {
+            do {
+                var urls: [String] = []
+                
+                guard let itemProvider = extensionItem.attachments else {
+                    return
                 }
-            case .failure(let error):
-                print("Failed \(error)")
-                self.cancel()
-                return
+                
+                for item in itemProvider {
+                    let url = try await getURL(item: item)
+                    if let unescapedURLString = url.path().removingPercentEncoding {
+                        urls.append(unescapedURLString)
+                    } else {
+                        print("Failed to unescape the URL.")
+                    }
+                }
+
+
+                print("Urls \(urls)")
+                self.buildView(urls: urls)
+            } catch {
+                print(error)
             }
         }
     }

@@ -29,7 +29,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
 
     @Published public var advertisementEnabled = false
     @Published public var isPoweredOn = true
-    @Published public var selectedFileURL: String?
+    @Published public var selectedFileURLs: [String] = []
     @Published public var showDeviceSelectionSheet = false
     @Published public var showConnectionRequestDialog = false
     @Published public var currentConnectionRequest: ConnectionRequest?
@@ -42,28 +42,34 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     @Published public var deviceName: String = "" {
         didSet {
             DispatchQueue.main.async {
-                self.namingSaveButtonDisabled = self.deviceName.count < 3
+                self.namingSaveButtonDisabled = self.deviceName.count < 1
             }
         }
     }
 
-    @Published public var imageSelection: PhotosPickerItem? = nil {
+    @Published public var imageSelection: [PhotosPickerItem] = [] {
         didSet {
-            if let imageSelection {
-                getURL(photo: imageSelection) { result in
-                    switch result {
-                    case .success(let data):
-                        self.shouldDeleteSelectedFileAfterwards = true
-                        self.selectedFileURL = data.path
-                        self.showDeviceSelectionSheet = self.selectedFileURL != nil
-                        DispatchQueue.main.async {
-                            self.imageSelection = nil
+            if !imageSelection.isEmpty {
+                self.selectedFileURLs = []
+
+                Task {
+                    for image in imageSelection {
+                        do {
+                            let url = try await getURL(photo: image)
+                            self.shouldDeleteSelectedFileAfterwards = true
+                            DispatchQueue.main.async {
+                                self.selectedFileURLs.append(url.path)
+                            }
+                        } catch {
+                            print("error \(error)")
                         }
-                    case .failure(_):
-                        print("Failed")
+                    }
+
+                    DispatchQueue.main.async {
+                        self.showDeviceSelectionSheet = true
+                        self.imageSelection = []
                     }
                 }
-            } else {
             }
         }
     }
@@ -91,7 +97,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     func showDeviceNamingAlertOnMac() {
         let alert = NSAlert()
         alert.messageText = "Name this device"
-        alert.informativeText = "Nearby devices will discover this device using this name, which must be at least three characters long."
+        alert.informativeText = "Others will discover this device by this name"
         alert.alertStyle = .informational
         
         // Add a text field for the device name
@@ -104,7 +110,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
         let response = alert.runModal()
 
         if response == .alertFirstButtonReturn {
-            if (textField.stringValue.count < 3) {
+            if (textField.stringValue.count < 1) {
                 showDeviceNamingAlertOnMac()
                 return
             }
@@ -157,7 +163,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     }
     
     public func saveName() {
-        if deviceName.count < 3 {
+        if deviceName.count < 1 {
             return
         }
         
@@ -232,11 +238,15 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     public func onDeviceListSheetDismissed() {
         Task {
             do {
-                if shouldDeleteSelectedFileAfterwards, let selectedFileURL {
-                    try FileManager.default.removeItem(atPath: selectedFileURL)
+                if shouldDeleteSelectedFileAfterwards {
+                    for file in selectedFileURLs {
+                        try FileManager.default.removeItem(atPath: file)
+                    }
                 }
-                else if !shouldDeleteSelectedFileAfterwards, let selectedFileURL {
-                    NSURL(string: selectedFileURL)?.stopAccessingSecurityScopedResource()
+                else if !shouldDeleteSelectedFileAfterwards {
+                    for file in selectedFileURLs {
+                        NSURL(string: file)?.stopAccessingSecurityScopedResource()
+                    }
                 }
             } catch {
                 print(error)

@@ -73,10 +73,10 @@ class ShareViewController: UIViewController, NearbyServerDelegate {
         }
     }
     
-    func buildView(nearbyServer: NearbyServer, url: String) {
+    func buildView(nearbyServer: NearbyServer, urls: [String]) {
         DispatchQueue.main.async {
             let view = NavigationStack {
-                DeviceSelectionView(nearbyServer: nearbyServer, imageURL: url)
+                DeviceSelectionView(nearbyServer: nearbyServer, urls: urls)
                     .environmentObject(self.discovery)
                     .toolbar(content: {
                         ToolbarItem(placement: .confirmationAction) {
@@ -107,26 +107,34 @@ class ShareViewController: UIViewController, NearbyServerDelegate {
             return
         }
         
-        guard
-            let extensionItem = extensionContext?.inputItems.first as? NSExtensionItem,
-            let itemProvider = extensionItem.attachments?.first else {
+        guard let extensionItem = extensionContext?.inputItems.first as? NSExtensionItem else {
             close()
             return
         }
         
-        getURL(item: itemProvider) { result in
-            switch result {
-            case .success(let data):
-                if let unescapedURLString = data.path().removingPercentEncoding {
-                    self.buildView(nearbyServer: nearbyServer, url: unescapedURLString)
-                } else {
-                    print("Failed to unescape the URL.")
-                    self.close()
+        Task {
+            do {
+                var urls: [String] = []
+                
+                guard let itemProvider = extensionItem.attachments else {
+                    return
                 }
-            case .failure(_):
-                print("Failed")
-                self.close()
-                return
+                
+                for item in itemProvider {
+                    let url = try await getURL(item: item)
+                    if let unescapedURLString = url.path().removingPercentEncoding {
+                        urls.append(unescapedURLString)
+                    } else {
+                        print("Failed to unescape the URL.")
+                        self.close()
+                    }
+                }
+
+
+                print("Urls \(urls)")
+                self.buildView(nearbyServer: nearbyServer, urls: urls)
+            } catch {
+                print(error)
             }
         }
     }

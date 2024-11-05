@@ -15,6 +15,7 @@ class SendProgress: SendProgressDelegate, ObservableObject {
     func progressChanged(progress: SendProgressState) {
         DispatchQueue.main.async {
             if case .connectionMediumUpdate(let medium) = progress {
+                print("Updated to \(medium)")
                 self.medium = medium
             }
             
@@ -25,17 +26,17 @@ class SendProgress: SendProgressDelegate, ObservableObject {
 
 class DeviceInfoListViewModel: ObservableObject {
     private let nearbyServer: NearbyServer
-    private let imageURL: String
+    private let urls: [String]
     
-    init(nearbyServer: NearbyServer, imageURL: String) {
+    init(nearbyServer: NearbyServer, urls: [String]) {
         self.nearbyServer = nearbyServer
-        self.imageURL = imageURL
+        self.urls = urls
     }
 
     public func send(device: Device, progress: SendProgress) {
         Task {
             do {
-                try await self.nearbyServer.sendFile(to: device, url: imageURL, progress: progress)
+                try await self.nearbyServer.send(urls: urls, to: device, progress: progress)
             } catch {
                 print(error)
             }

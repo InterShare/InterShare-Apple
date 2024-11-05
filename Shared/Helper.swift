@@ -30,6 +30,19 @@ func toHumanReadableSize(bytes: UInt64?) -> String {
     return "\(formattedSize) \(units[digitGroups])"
 }
 
+func getURL(photo: PhotosPickerItem) async throws -> URL {
+    return try await withCheckedThrowingContinuation { continuation in
+        getURL(photo: photo) { result in
+            switch result {
+            case .success(let url):
+                continuation.resume(returning: url)
+            case .failure(let error):
+                continuation.resume(throwing: error)
+            }
+        }
+    }
+}
+
 func getURL(photo item: PhotosPickerItem, completionHandler: @escaping (_ result: Result<URL, Error>) -> Void) {
     item.loadTransferable(type: Data.self) { result in
         switch result {
@@ -49,6 +62,19 @@ func getURL(photo item: PhotosPickerItem, completionHandler: @escaping (_ result
             }
         case .failure(let failure):
             completionHandler(.failure(failure))
+        }
+    }
+}
+
+func getURL(item: NSItemProvider) async throws -> URL {
+    return try await withCheckedThrowingContinuation { continuation in
+        getURL(item: item) { result in
+            switch result {
+            case .success(let url):
+                continuation.resume(returning: url)
+            case .failure(let error):
+                continuation.resume(throwing: error)
+            }
         }
     }
 }

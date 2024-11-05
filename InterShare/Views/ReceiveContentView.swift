@@ -41,7 +41,7 @@ struct ReceiveContentView: View {
                     .opacity(0.6)
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(connectionRequest?.getFileTransferIntent()?.fileName ?? "Unknown file")
+                    Text(connectionRequest?.getFileTransferIntent()?.fileName ?? "\(connectionRequest?.getFileTransferIntent()?.fileCount ?? 1) files")
                         .font(.headline)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(.primary)
