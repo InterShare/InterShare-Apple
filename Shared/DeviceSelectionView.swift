@@ -48,10 +48,12 @@ struct DeviceSelectionView: View {
         .frame(maxHeight: .infinity)
         .overlay(alignment: .bottom) {
             HStack() {
-                Image(systemName: "eye.slash.fill")
-                    .symbolRenderingMode(.hierarchical)
+                ProgressView()
+#if os(macOS)
+                    .controlSize(.small)
+#endif
                 VStack {
-                    Text("Don't see the right device?")
+                    Text("Looking for nearby devices")
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .bold()
                         .padding(.bottom, 0)
@@ -85,19 +87,11 @@ struct DeviceSelectionView: View {
 }
 
 #Preview {
-    VStack {
-    }
-    .sheet(isPresented: .constant(true), onDismiss: {}) {
-        if #available(macOS 13.3, *) {
-            DeviceSelectionView(nearbyServer: NearbyServer(myDevice: Device(id: "", name: "", deviceType: 0), storage: "", delegate: ContentViewModel()), urls: [""])
-                .environmentObject(DiscoveryService())
-                .presentationCornerRadius(20)
-                .presentationBackground(.regularMaterial)
-                .presentationDetents([ .medium, .large])
-        } else {
-            DeviceSelectionView(nearbyServer: NearbyServer(myDevice: Device(id: "", name: "", deviceType: 0), storage: "", delegate: ContentViewModel()), urls: [""])
-                .environmentObject(DiscoveryService())
-                .presentationDetents([ .medium, .large])
-        }
+    if #available(macOS 13.3, *) {
+        DeviceSelectionView(nearbyServer: NearbyServer(myDevice: Device(id: "", name: "", deviceType: 0), storage: "", delegate: ContentViewModel()), urls: [""])
+            .environmentObject(DiscoveryService())
+    } else {
+        DeviceSelectionView(nearbyServer: NearbyServer(myDevice: Device(id: "", name: "", deviceType: 0), storage: "", delegate: ContentViewModel()), urls: [""])
+            .environmentObject(DiscoveryService())
     }
 }

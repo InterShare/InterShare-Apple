@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "LogoRounded.png",
+      "filename" : "InterShare Logo Mac.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "LogoRounded 1.png",
+      "filename" : "InterShare Logo Mac 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "LogoRounded 2.png",
+      "filename" : "InterShare Logo Mac 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

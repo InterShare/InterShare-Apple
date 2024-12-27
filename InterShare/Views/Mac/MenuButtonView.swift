@@ -36,9 +36,20 @@ struct MenuButtonView: View {
             HStack {
                 if let icon = icon {
                     Image(systemName: icon)
-                        .frame(width: 5, height: 5)
+                        .frame(width: 7, height: 7)
                         .padding(10)
-                        .background(isActivated ? Color(NSColor.controlAccentColor) : Color.gray.opacity(0.3))
+                        .foregroundStyle(isActivated ? .white : Color(NSColor.textColor).opacity(0.8))
+                        .background(
+                            ZStack {
+                                if isActivated {
+                                    Color(NSColor.controlAccentColor)
+                                } else {
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .background(Material.ultraThinMaterial)
+                                        .opacity(0.2)
+                                }
+                            }
+                        )
                         .clipShape(Capsule())
                 }
                 
@@ -47,7 +58,18 @@ struct MenuButtonView: View {
             .padding(.horizontal, 5)
             .padding(.vertical, 3)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(isHovered ? hightlightColor : Color.clear)
+//            .background(isHovered ? Material.thinMaterial : Color.clear)
+            .background(
+                ZStack {
+                    if isHovered {
+                        RoundedRectangle(cornerRadius: 5)
+                            .background(Material.ultraThinMaterial)
+                            .opacity(0.2)
+                    } else {
+                        Color.clear
+                    }
+                }
+            )
             .clipShape(RoundedRectangle(cornerRadius: 5))
         }
         .buttonStyle(.plain)

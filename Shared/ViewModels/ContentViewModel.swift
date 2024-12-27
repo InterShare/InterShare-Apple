@@ -179,9 +179,25 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
         }
     }
 
-    func stopServer() async {
+    func stopServer() {
+        if nearbyServer?.state != .poweredOn {
+            return
+        }
+
         do {
             try nearbyServer?.stop()
+        } catch {
+            print(error)
+        }
+    }
+    
+    func startServer() async {
+        if nearbyServer?.state != .poweredOn {
+            return
+        }
+
+        do {
+            try await nearbyServer?.start()
         } catch {
             print(error)
         }

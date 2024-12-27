@@ -77,6 +77,7 @@ struct ConnectionRequestView: View {
                             Text("Receiving")
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .font(.system(size: 16))
+                                .foregroundStyle(.white)
                                 .bold()
                         } else if receiveProgress.state == .extracting {
                             Text("Extracting")
@@ -110,7 +111,8 @@ struct ConnectionRequestView: View {
                 HStack {
                     Image("InterShareIcon")
                         .resizable()
-                        .frame(width: 50, height: 50)
+                        .frame(width: 40, height: 40)
+                        .padding(.trailing, 5)
                     
                     VStack() {
                         if (connectionRequest?.getFileTransferIntent()?.fileCount == 1) {
@@ -125,6 +127,13 @@ struct ConnectionRequestView: View {
                 }
                 
                 HStack {
+                    Button("Decline") {
+                        connectionRequest?.decline()
+                        close()
+                    }
+                        .buttonStyle(.bordered)
+                        .controlSize(.large)
+                    
                     Button("Accept") {
                         connectionRequest?.setProgressDelegate(delegate: receiveProgress)
                         self.receiveProgress.completionHandler = {
@@ -134,7 +143,7 @@ struct ConnectionRequestView: View {
                         }
 
                         Thread {
-                            connectionRequest?.accept()
+                            let _ = connectionRequest?.accept()
                         }.start()
                         
                         showProgress = true
@@ -142,13 +151,6 @@ struct ConnectionRequestView: View {
                         withAnimation(Animation.timingCurve(0.16, 1, 0.3, 1, duration: 0.7)) {
                             dynamicWidth = 190
                         }
-                    }
-                        .buttonStyle(.bordered)
-                        .controlSize(.large)
-
-                    Button("Decline") {
-                        connectionRequest?.decline()
-                        close()
                     }
                         .buttonStyle(.bordered)
                         .controlSize(.large)

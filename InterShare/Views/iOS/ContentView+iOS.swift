@@ -38,6 +38,33 @@ struct ContentView: View {
         return (viewModel.currentConnectionRequest?.getSender().name ?? "Unknown") + " wants to send you \(viewModel.currentConnectionRequest?.getFileTransferIntent()?.fileCount ?? 0) files."
     }
     
+    func getAppVersion() -> String {
+        if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            return appVersion
+        }
+        return "Unknown"
+    }
+
+    func shareFile() {
+        guard let filePath = getLogFilePathStr() else {
+            return
+        }
+        
+        let fileURL = URL(fileURLWithPath: filePath)
+        
+        guard FileManager.default.fileExists(atPath: filePath) else {
+            print("File does not exist")
+            return
+        }
+        
+        let activityViewController = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
+        
+        // Get the current root view controller
+        if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
+            rootViewController.present(activityViewController, animated: true, completion: nil)
+        }
+    }
+    
     var body: some View {
         ZStack(alignment: .top) {
             LinearGradient(colors: [Color("StartGradientStart"), Color("StartGradientEnd"), .clear], startPoint: .top, endPoint: .bottom)
@@ -90,7 +117,7 @@ struct ContentView: View {
                     Text("Share")
                         .opacity(0.7)
                         .bold()
-                        .padding(.bottom)
+                        .padding(.vertical)
                     
                     HStack {
                         PhotosPicker(
@@ -226,6 +253,34 @@ struct ContentView: View {
 //                .presentationDetents([.height(200)])
                 .presentationDragIndicator(.hidden)
                 .interactiveDismissDisabled(true)
+            }
+            .onChange(of: scenePhase) {
+                switch scenePhase {
+                case .active:
+                    print("App is active")
+                    
+                    Task {
+                        await viewModel.startServer()
+                    }
+                case .background:
+                    print("App is in the background")
+                    viewModel.stopServer()
+                default:
+                    break
+                }
+            }
+        }
+        .toolbar {
+            Menu {
+                Button(action: {}) {
+                    Label("App Version: \(getAppVersion())", systemImage: "info")
+                }.disabled(true)
+                
+                Button(action: shareFile) {
+                    Label("Share Logs", systemImage: "square.and.arrow.up")
+                }
+            } label: {
+                Image(systemName: "questionmark.circle")
             }
         }
         .navigationTitle("InterShare")

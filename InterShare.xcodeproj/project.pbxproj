@@ -97,7 +97,7 @@
 		0A1C35232B60F32200BBE6C3 /* DeviceSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSelectionView.swift; sourceTree = "<group>"; };
 		0A2686112CC5B74A0011A9FD /* MenuButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButtonView.swift; sourceTree = "<group>"; };
 		0A435E0A2A6F0F78008161DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		0A5CFECB2B4894AD0004247E /* DataRCTFFI.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DataRCTFFI.xcframework; path = ../../../data_rct/bindings/swift/DataRCTFFI.xcframework; sourceTree = "<group>"; };
+		0A5CFECB2B4894AD0004247E /* DataRCTFFI.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DataRCTFFI.xcframework; path = ../../intershare-sdk/bindings/swift/DataRCTFFI.xcframework; sourceTree = "<group>"; };
 		0A5E3F102CC5A09300AA2A27 /* MacShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MacShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A69D42F2CC3E3BF0066A19E /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A6C60C22A88D2AD003ADA7A /* IpHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IpHelper.swift; sourceTree = "<group>"; };
@@ -115,7 +115,7 @@
 		0AEC7C1D299BA2FB005BBB0E /* InterShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InterShare.entitlements; sourceTree = "<group>"; };
 		0AEC7C1F299BA2FB005BBB0E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0AF497122CC6B2190049DAC3 /* LocalNetworkAuthorization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNetworkAuthorization.swift; sourceTree = "<group>"; };
-		0AF497182CC6E4570049DAC3 /* InterShareSDKFFI.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = InterShareSDKFFI.xcframework; path = ../../../data_rct/bindings/swift/InterShareSDKFFI.xcframework; sourceTree = "<group>"; };
+		0AF497182CC6E4570049DAC3 /* InterShareSDKFFI.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = InterShareSDKFFI.xcframework; path = ../../intershare-sdk/bindings/swift/InterShareSDKFFI.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -419,7 +419,7 @@
 			);
 			mainGroup = 0AEC7C0B299BA2FA005BBB0E;
 			packageReferences = (
-				0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../../data_rct" */,
+				0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../intershare-sdk" */,
 				0A5E3EE52CC59C7200AA2A27 /* XCLocalSwiftPackageReference "../../../DynamicNotchKit" */,
 			);
 			productRefGroup = 0AEC7C15299BA2FA005BBB0E /* Products */;
@@ -926,9 +926,9 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../../DynamicNotchKit;
 		};
-		0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../../data_rct" */ = {
+		0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../intershare-sdk" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../data_rct;
+			relativePath = ../../intershare-sdk;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -948,17 +948,17 @@
 		};
 		0AF497162CC6E42D0049DAC3 /* InterShareKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../../data_rct" */;
+			package = 0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../intershare-sdk" */;
 			productName = InterShareKit;
 		};
 		0AF4971A2CC6E46A0049DAC3 /* InterShareKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../../data_rct" */;
+			package = 0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../intershare-sdk" */;
 			productName = InterShareKit;
 		};
 		0AF4971F2CC6E4710049DAC3 /* InterShareKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../../data_rct" */;
+			package = 0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../intershare-sdk" */;
 			productName = InterShareKit;
 		};
 /* End XCSwiftPackageProductDependency section */

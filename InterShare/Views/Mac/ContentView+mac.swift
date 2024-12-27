@@ -50,7 +50,7 @@ struct ContentView: View {
             Divider()
             
             VStack(spacing: 0) {
-                MenuButtonView("Visible to Everyone", icon: "eye.fill", isActivated: $viewModel.advertisementEnabled, hightlightColor: .gray.opacity(0.2)) {
+                MenuButtonView("Visible to Everyone", icon: "person.2.fill", isActivated: $viewModel.advertisementEnabled, hightlightColor: .gray.opacity(0.2)) {
                     viewModel.advertisementEnabled = true
                     viewModel.changeAdvertisementState()
                 }
@@ -65,7 +65,7 @@ struct ContentView: View {
             
             HStack {
                 Text("Device name:")
-                    .opacity(0.5)
+                    .opacity(0.8)
                 
                 Button(action: { viewModel.showDeviceNamingAlertOnMac() }) {
                     Text(viewModel.deviceName)

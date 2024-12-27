@@ -116,6 +116,7 @@ class ShareViewController: NSViewController, NearbyServerDelegate {
     }
 
     func cancel() {
+        self.discovery.close()
         let cancelError = NSError(domain: NSCocoaErrorDomain, code: NSUserCancelledError, userInfo: nil)
         self.extensionContext!.cancelRequest(withError: cancelError)
     }

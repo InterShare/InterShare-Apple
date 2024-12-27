@@ -152,6 +152,7 @@ struct DeviceInfoListView: View {
             Text(deviceInfo.name)
                 .lineLimit(2)
                 .frame(alignment: .center)
+                .multilineTextAlignment(.center)
                 .font(.system(size: 14, weight: .regular, design: .rounded))
                 .opacity(0.8)
                 .foregroundColor(.primary)
