@@ -23,8 +23,11 @@ struct ShareSheetView: View {
             Divider()
                 .padding(0)
             
-            DeviceSelectionView(nearbyServer: nearbyServer, urls: urls)
+            ShareView(nearbyServer: nearbyServer, urls: urls)
                 .environmentObject(discovery)
+                .onAppear {
+                    self.discovery.startScan()
+                }
             
             Divider()
                 .padding(0)

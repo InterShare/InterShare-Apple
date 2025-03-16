@@ -30,13 +30,16 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     @Published public var advertisementEnabled = false
     @Published public var isPoweredOn = true
     @Published public var selectedFileURLs: [String] = []
+    @Published public var clipboard: String? = nil
     @Published public var showDeviceSelectionSheet = false
     @Published public var showConnectionRequestDialog = false
+    @Published public var showClipboardActionsDialog = false
     @Published public var currentConnectionRequest: ConnectionRequest?
     @Published public var showDeviceNamingAlert = false
     @Published public var namingSaveButtonDisabled = false
     @Published public var showReceivingDialog = false
     @Published public var receiveProgress: ReceiveProgress?
+    @Published public var galleryLocalLink: String?
     
     
     @Published public var deviceName: String = "" {
@@ -51,6 +54,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
         didSet {
             if !imageSelection.isEmpty {
                 self.selectedFileURLs = []
+                self.clipboard = nil
 
                 Task {
                     for image in imageSelection {
@@ -179,13 +183,13 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
         }
     }
 
-    func stopServer() {
+    func stopServer() async {
         if nearbyServer?.state != .poweredOn {
             return
         }
 
         do {
-            try nearbyServer?.stop()
+            try await nearbyServer?.stop()
         } catch {
             print(error)
         }
@@ -220,7 +224,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
                 if advertisementEnabled {
                     try await self.nearbyServer?.start()
                 } else {
-                    try nearbyServer?.stop()
+                    try await nearbyServer?.stop()
                 }
             } catch {
                 print(error)
@@ -236,7 +240,11 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
         DispatchQueue.main.async {
 #if os(iOS)
             self.currentConnectionRequest = request
-            self.showConnectionRequestDialog = true
+            if request.getIntentType() == .clipboard {
+                self.showClipboardActionsDialog = true
+            } else {
+                self.showConnectionRequestDialog = true
+            }
 #else
             var dynamicNotch: DynamicNotch<ConnectionRequestView>?
             
@@ -268,5 +276,22 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
                 print(error)
             }
         }
+    }
+    
+    public func shareClipboard() {
+        let content = UIPasteboard.general.string
+        
+        if content?.isEmpty == false {
+            clipboard = content
+            self.showDeviceSelectionSheet = true
+        }
+    }
+    
+    public func copySharedTextToClipboard(request: ConnectionRequest) {
+        guard let intent = request.getClipboardIntent() else {
+            return
+        }
+        
+        UIPasteboard.general.string = intent.clipboardContent
     }
 }

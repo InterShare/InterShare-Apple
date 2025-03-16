@@ -40,12 +40,25 @@ struct ContentView: View {
     func performDrop(info: DropInfo) -> Bool {
         return true
     }
+    
+    func getAppVersion() -> String {
+        if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            return appVersion
+        }
+        return "Unknown"
+    }
 
     var body: some View {
         VStack(alignment: .leading) {
             Text("InterShare")
                 .bold()
                 .opacity(0.5)
+            
+            Divider()
+            
+            Button (action: {}) {
+                Text("Share Clipboard")
+            }
             
             Divider()
             
@@ -75,6 +88,17 @@ struct ContentView: View {
             }
             .padding(.horizontal, 5)
             .padding(.vertical, 2)
+            
+            Text("App Version: \(getAppVersion())")
+                .opacity(0.8)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 0)
+
+            Link(destination: URL(string: "https://buymeacoffee.com/julianbaumann")!) {
+                Label("Buy me a coffee", systemImage: "cup.and.heat.waves")
+            }
+            .padding(.horizontal, 5)
+            .padding(.vertical, 0)
             
             Divider()
             

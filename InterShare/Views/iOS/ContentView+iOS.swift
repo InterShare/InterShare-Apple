@@ -17,6 +17,8 @@ struct ContentView: View {
     @State private var animateGradient = true
     @State private var showFileImporter = false
     
+    let discovery = DiscoveryService()
+    
     init() {
         var titleFont = UIFont.preferredFont(forTextStyle: .largeTitle)
 
@@ -31,6 +33,10 @@ struct ContentView: View {
     }
     
     func getRequestText() -> String {
+        if viewModel.currentConnectionRequest?.getIntentType() == .clipboard {
+            return (viewModel.currentConnectionRequest?.getSender().name ?? "Unknown") + " wants to send you a text"
+        }
+        
         if (viewModel.currentConnectionRequest?.getFileTransferIntent()?.fileCount == 1) {
             return (viewModel.currentConnectionRequest?.getSender().name ?? "Unknown") + " wants to send you a file (\(toHumanReadableSize(bytes: viewModel.currentConnectionRequest?.getFileTransferIntent()?.fileSize)))"
         }
@@ -58,9 +64,10 @@ struct ContentView: View {
         }
         
         let activityViewController = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
-        
+
         // Get the current root view controller
-        if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let rootViewController = windowScene.windows.first(where: { $0.isKeyWindow })?.rootViewController {
             rootViewController.present(activityViewController, animated: true, completion: nil)
         }
     }
@@ -117,38 +124,53 @@ struct ContentView: View {
                     Text("Share")
                         .opacity(0.7)
                         .bold()
-                        .padding(.vertical)
+                        .padding(.top, 0)
+                        .padding(.bottom, 5)
                     
                     HStack {
                         PhotosPicker(
                             selection: $viewModel.imageSelection,
+                            preferredItemEncoding: .current,
                             photoLibrary: .shared()
                         ) {
-                            Text("Image or Video")
-                                    .padding(.vertical, 10)
-                                    .frame(maxWidth: .infinity)
+                            VStack {
+                                Image(systemName: "photo.on.rectangle.angled")
+                                
+                                Text("Photos")
+                                    .padding(.top, 1)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 60)
                         }
                         .disabled(!viewModel.isPoweredOn)
                         .buttonStyle(.borderedProminent)
-                        .buttonBorderShape(.capsule)
+//                        .buttonBorderShape(.roundedRectangle)
+                        .buttonBorderShape(.roundedRectangle(radius: 25))
                         .tint(Color("ButtonTint"))
                         .foregroundStyle(Color("ButtonTextColor"))
                         
                         Button(action: {
                             showFileImporter = true
                         }) {
-                            Text("File")
-                                .padding(.vertical, 10)
-                                .frame(maxWidth: .infinity)
+                            VStack {
+                                Image(systemName: "folder")
+                                
+                                Text("Files")
+                                    .padding(.top, 1)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 60)
                         }
                         .disabled(!viewModel.isPoweredOn)
                         .buttonStyle(.borderedProminent)
-                        .buttonBorderShape(.capsule)
+//                        .buttonBorderShape(.roundedRectangle)
+                        .buttonBorderShape(.roundedRectangle(radius: 25))
                         .tint(Color("ButtonTint"))
                         .foregroundStyle(Color("ButtonTextColor"))
                         .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.item], allowsMultipleSelection: true, onCompletion: { results in
                             switch results {
                             case .success(let fileUrls):
+                                viewModel.clipboard = nil
                                 viewModel.selectedFileURLs = []
 
                                 for fileUrl in fileUrls {
@@ -162,13 +184,33 @@ struct ContentView: View {
                                 print(error)
                             }
                         })
+                        
+
+                        Button(action: {
+                            viewModel.shareClipboard()
+                        }) {
+                            VStack {
+                                Image(systemName: "clipboard")
+                                Text("Clipboard")
+                                    .padding(.top, 1)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 60)
+                        }
+                        .disabled(!viewModel.isPoweredOn)
+                        .buttonStyle(.borderedProminent)
+//                        .buttonBorderShape(.roundedRectangle)
+                        .buttonBorderShape(.roundedRectangle(radius: 25))
+                        .tint(Color("ButtonTint"))
+                        .foregroundStyle(Color("ButtonTextColor"))
+                        .animation(nil, value: UUID())
                     }
                     .padding(.horizontal)
                     
                     Button(action: {
                         UIApplication.shared.open(URL(string: "shareddocuments://\(viewModel.documentsDirectory.path)")!)
                     }) {
-                        Text("Received files")
+                        Text("Received Files")
                             .padding(.vertical, 10)
                             .frame(maxWidth: .infinity)
                     }
@@ -178,6 +220,7 @@ struct ContentView: View {
                     .padding(.horizontal)
                     .animation(nil, value: UUID())
                 }
+                .frame(maxWidth: 600)
                 .ignoresSafeArea(.keyboard)
                 
             }
@@ -205,9 +248,16 @@ struct ContentView: View {
                 Button("Accept") {
                     viewModel.receiveProgress = ReceiveProgress()
                     request.setProgressDelegate(delegate: viewModel.receiveProgress!)
-
+                    viewModel.galleryLocalLink = nil
+                    
                     Thread {
-                        let _ = request.accept()
+                        if let filePaths = request.accept() {
+                            MediaSaver().save(files: filePaths) { localId in
+                                if localId != nil {
+                                    viewModel.galleryLocalLink = localId
+                                }
+                            }
+                        }
                     }.start()
                     
                     DispatchQueue.main.async {
@@ -227,19 +277,45 @@ struct ContentView: View {
                 }
             }
             
+            .alert(
+                getRequestText(),
+                isPresented: $viewModel.showClipboardActionsDialog,
+                presenting: viewModel.currentConnectionRequest
+            ) { request in
+                Button("Copy") {
+                    viewModel.copySharedTextToClipboard(request: request)
+                }
+                Button(role: .cancel) {
+                    request.decline()
+                } label: {
+                    Text("Cancel")
+                }
+            } message: { request in
+                Text("\"\(request.getClipboardIntent()?.clipboardContent ?? "")\"")
+            }
+            
             .sheet(isPresented: $viewModel.showDeviceSelectionSheet, onDismiss: viewModel.onDeviceListSheetDismissed) {
                 if let nearbyServer = viewModel.nearbyServer {
-                    let discovery = DiscoveryService()
 
-                    DeviceSelectionView(nearbyServer: nearbyServer, urls: viewModel.selectedFileURLs)
+                    ShareView(nearbyServer: nearbyServer, urls: viewModel.selectedFileURLs, clipboard: viewModel.clipboard)
                         .padding(.top, 10)
                         .environmentObject(discovery)
                         .presentationCornerRadius(30)
                         .presentationBackground(.regularMaterial)
-                        .presentationDetents([ .medium, .large])
-                        .onDisappear {
-                            discovery.close()
-                        }
+//                        .interactiveDismissDisabled()
+//                        .onDisappear {
+//                            print("Discovery closed")
+//                            discovery.close()
+//                        }
+                }
+            }
+            .onChange(of: viewModel.showDeviceSelectionSheet) { isPresented in
+                if isPresented {
+                    print("Starting scan")
+                    discovery.startScan()
+                } else {
+                    print("Stopping scan")
+                    discovery.close()
                 }
             }
             
@@ -248,14 +324,15 @@ struct ContentView: View {
                     ReceiveContentView(
                         progress: viewModel.receiveProgress ?? ReceiveProgress(),
                         downloadsPath: viewModel.documentsDirectory.path,
+                        galleryLinkId: viewModel.galleryLocalLink,
                         connectionRequest: viewModel.currentConnectionRequest!)
                 }
 //                .presentationDetents([.height(200)])
                 .presentationDragIndicator(.hidden)
                 .interactiveDismissDisabled(true)
             }
-            .onChange(of: scenePhase) {
-                switch scenePhase {
+            .onChange(of: scenePhase) { newPhase in
+                switch newPhase {
                 case .active:
                     print("App is active")
                     
@@ -264,18 +341,25 @@ struct ContentView: View {
                     }
                 case .background:
                     print("App is in the background")
-                    viewModel.stopServer()
+                    Task {
+                        await viewModel.stopServer()
+                    }
                 default:
                     break
                 }
             }
         }
+        
         .toolbar {
             Menu {
                 Button(action: {}) {
                     Label("App Version: \(getAppVersion())", systemImage: "info")
                 }.disabled(true)
-                
+
+                Link(destination: URL(string: "https://buymeacoffee.com/julianbaumann")!) {
+                    Label("Buy me a coffee", systemImage: "cup.and.heat.waves")
+                }
+
                 Button(action: shareFile) {
                     Label("Share Logs", systemImage: "square.and.arrow.up")
                 }

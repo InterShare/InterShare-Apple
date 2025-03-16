@@ -12,6 +12,7 @@ struct ReceiveContentView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var progress: ReceiveProgress
     var downloadsPath: String
+    var galleryLinkId: String?
     
     var connectionRequest: ConnectionRequest?
     @State private var gradientHeight: CGFloat = 0.0
@@ -72,7 +73,7 @@ struct ReceiveContentView: View {
                     
                     Button(action: {
                         Task {
-                            await connectionRequest?.cancel()
+                            connectionRequest?.cancel()
                         }
                         dismiss()
                     }) {
@@ -107,9 +108,18 @@ struct ReceiveContentView: View {
                     
 #if os(iOS)
                     Button(action: {
-                        UIApplication.shared.open(URL(string: "shareddocuments://\(downloadsPath)")!)
+                        if let galleryLinkId {
+                            if let url = URL(string: "photos-redirect://"), UIApplication.shared.canOpenURL(url) {
+                                print(url)
+                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            } else {
+                                print("Unable to open Photos app.")
+                            }
+                        } else {
+                            UIApplication.shared.open(URL(string: "shareddocuments://\(downloadsPath)")!)
+                        }
                     }) {
-                        Text("Received files")
+                        Text(galleryLinkId == nil ? "View in Files" : "Open Photos App")
                             .padding(.vertical, 10)
                             .frame(maxWidth: .infinity)
                     }
@@ -168,7 +178,7 @@ struct ReceiveContentView: View {
                     
                     Button(action: {
                         Task {
-                            await connectionRequest?.cancel()
+                            connectionRequest?.cancel()
                         }
                         
                         dismiss()

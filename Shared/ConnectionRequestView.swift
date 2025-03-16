@@ -5,10 +5,10 @@
 //  Created by Julian Baumann on 20.10.24.
 //
 
-import SwiftUI
-import InterShareKit
 #if os(macOS)
 import DynamicNotchKit
+import SwiftUI
+import InterShareKit
 
 struct ConnectionRequestView: View {
     var close: () -> Void
@@ -77,7 +77,6 @@ struct ConnectionRequestView: View {
                             Text("Receiving")
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .font(.system(size: 16))
-                                .foregroundStyle(.white)
                                 .bold()
                         } else if receiveProgress.state == .extracting {
                             Text("Extracting")

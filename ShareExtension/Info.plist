@@ -8,6 +8,10 @@
 		<dict>
 			<key>NSExtensionActivationRule</key>
 			<dict>
+				<key>NSExtensionActivationSupportsWebPageWithMaxCount</key>
+				<integer>1</integer>
+				<key>NSExtensionActivationSupportsText</key>
+				<true/>
 				<key>NSExtensionActivationSupportsFileWithMaxCount</key>
 				<integer>100</integer>
 				<key>NSExtensionActivationSupportsImageWithMaxCount</key>

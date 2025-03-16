@@ -23,9 +23,7 @@ struct ReadyToReceiveView: View {
         .padding(5)
         .background(.ultraThinMaterial)
         .cornerRadius(15)
-#if os(iOS)
-        .safeAreaPadding(.vertical)
-#endif
+        .applySafeAreaPadding()
     }
 }
 

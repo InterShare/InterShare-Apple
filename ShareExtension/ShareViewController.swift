@@ -9,9 +9,12 @@ import UIKit
 import Social
 import SwiftUI
 import InterShareKit
+import UniformTypeIdentifiers
 
 class ShareViewController: UIViewController, NearbyServerDelegate {
     private var discovery = DiscoveryService()
+    let contentTypeURL = UTType.url.identifier
+    let contentTypeText = UTType.text.identifier
     
     func nearbyServerDidUpdateState(state: InterShareKit.BluetoothState) {
         
@@ -73,10 +76,11 @@ class ShareViewController: UIViewController, NearbyServerDelegate {
         }
     }
     
-    func buildView(nearbyServer: NearbyServer, urls: [String]) {
+    func buildView(nearbyServer: NearbyServer, urls: [String], clipboard: String? = nil) {
         DispatchQueue.main.async {
+
             let view = NavigationStack {
-                DeviceSelectionView(nearbyServer: nearbyServer, urls: urls)
+                ShareView(nearbyServer: nearbyServer, urls: urls, clipboard: clipboard)
                     .environmentObject(self.discovery)
                     .toolbar(content: {
                         ToolbarItem(placement: .confirmationAction) {
@@ -85,8 +89,10 @@ class ShareViewController: UIViewController, NearbyServerDelegate {
                             }
                         }
                     })
+                    .onAppear {
+                        self.discovery.startScan()
+                    }
             }
-            
             
             let contentView = UIHostingController(rootView: view)
             self.addChild(contentView)
@@ -119,20 +125,30 @@ class ShareViewController: UIViewController, NearbyServerDelegate {
                 guard let itemProvider = extensionItem.attachments else {
                     return
                 }
-                
-                for item in itemProvider {
-                    let url = try await getURL(item: item)
-                    if let unescapedURLString = url.path().removingPercentEncoding {
-                        urls.append(unescapedURLString)
-                    } else {
-                        print("Failed to unescape the URL.")
-                        self.close()
+
+                if itemProvider.first?.hasItemConformingToTypeIdentifier(contentTypeURL) == true {
+                    let url = try await itemProvider.first!.loadItem(forTypeIdentifier: contentTypeURL) as! URL
+                    self.buildView(nearbyServer: nearbyServer, urls: [], clipboard: url.absoluteString)
+                }
+                else if itemProvider.first?.hasItemConformingToTypeIdentifier(contentTypeText) == true {
+                    let text = try await itemProvider.first!.loadItem(forTypeIdentifier: contentTypeText) as! String
+                    self.buildView(nearbyServer: nearbyServer, urls: [], clipboard: text)
+                }
+                else {
+                    for item in itemProvider {
+                        let url = try await getURL(item: item)
+                        if let unescapedURLString = url.path().removingPercentEncoding {
+                            urls.append(unescapedURLString)
+                        } else {
+                            print("Failed to unescape the URL.")
+                            self.close()
+                        }
                     }
+                    
+                    print("Urls \(urls)")
+                    self.buildView(nearbyServer: nearbyServer, urls: urls)
                 }
 
-
-                print("Urls \(urls)")
-                self.buildView(nearbyServer: nearbyServer, urls: urls)
             } catch {
                 print(error)
             }

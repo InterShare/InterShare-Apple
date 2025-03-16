@@ -12,6 +12,7 @@ import InterShareKit
 struct DeviceInfoListView: View {
     @State public var deviceInfo: Device
     @StateObject public var progress: SendProgress
+    @State var versionCompatibility = VersionCompatibility.compatible
     
     func getDeviceType() -> String {
         if deviceInfo.deviceType == DeviceType.desktop.rawValue {
@@ -39,8 +40,6 @@ struct DeviceInfoListView: View {
             break
         case .connectionMediumUpdate(medium: _):
             break
-        case .compressing:
-            return .cyan
         case .transferring(progress: _):
             return .purple
         case .cancelled:
@@ -64,8 +63,6 @@ struct DeviceInfoListView: View {
             return "Requesting"
         case .connectionMediumUpdate(medium: _):
             break
-        case .compressing:
-            return "Compressing"
         case .transferring(progress: _):
             return "Sending"
         case .cancelled:
@@ -114,6 +111,12 @@ struct DeviceInfoListView: View {
                 
                 .overlay(Group {
                     ZStack {
+                        if versionCompatibility != .compatible {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .symbolRenderingMode(.multicolor)
+                                .font(.system(size: 25))
+                        }
+                        
                         if let medium = progress.medium {
                             if medium == .wiFi {
                                 Image(systemName: "wifi.circle.fill")
@@ -129,7 +132,7 @@ struct DeviceInfoListView: View {
                     }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                 })
                 
-                if progress.state == .requesting || progress.state == .connecting || progress.state == .compressing {
+                if progress.state == .requesting || progress.state == .connecting {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
                     #if os(macOS)
@@ -167,6 +170,9 @@ struct DeviceInfoListView: View {
                 .frame(maxWidth: 90)
                 .truncationMode(.tail)
         }
+        .onAppear {
+            versionCompatibility = isCompatible(device: deviceInfo)
+        }
     }
 }
 
@@ -175,19 +181,19 @@ struct DeviceInfoListView_Previews: PreviewProvider {
         NavigationStack {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))], alignment: .leading, spacing: 15) {
                 Button(action: {}) {
-                    DeviceInfoListView(deviceInfo: Device(id: UUID().uuidString, name: "My Phone", deviceType: 0), progress: SendProgress())
+                    DeviceInfoListView(deviceInfo: Device(id: UUID().uuidString, name: "My Phone", deviceType: 0, protocolVersion: 0), progress: SendProgress())
                 }
                 .buttonStyle(.bordered)
                 .frame(maxHeight: .infinity, alignment: .top)
                 
                 Button(action: {}) {
-                    DeviceInfoListView(deviceInfo: Device(id: UUID().uuidString, name: "My PC", deviceType: 1), progress: SendProgress())
+                    DeviceInfoListView(deviceInfo: Device(id: UUID().uuidString, name: "My PC", deviceType: 1, protocolVersion: 100), progress: SendProgress())
                 }
                 .buttonStyle(.bordered)
                 .frame(maxHeight: .infinity, alignment: .top)
                 
                 Button(action: {}) {
-                    DeviceInfoListView(deviceInfo: Device(id: UUID().uuidString, name: "My Android Device Here", deviceType: 2), progress: SendProgress())
+                    DeviceInfoListView(deviceInfo: Device(id: UUID().uuidString, name: "My Android Device Here", deviceType: 2, protocolVersion: 0), progress: SendProgress())
                 }
                 .frame(maxHeight: .infinity, alignment: .top)
                 .buttonStyle(.bordered)

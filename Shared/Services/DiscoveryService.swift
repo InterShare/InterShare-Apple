@@ -47,8 +47,12 @@ class DiscoveryService: ObservableObject, DiscoveryDelegate {
         }
     }
     
-    func startScan() {    
+    func startScan() {
         do {
+            if let discovery = discovery {
+                try discovery.stopScan()
+            }
+
             discovery = try Discovery(delegate: self)
         } catch {
             print(error)
@@ -59,9 +63,16 @@ class DiscoveryService: ObservableObject, DiscoveryDelegate {
             self.resetProgress()
             self.shouldStartScan = true
             self.startInternalScan()
+            
+            let existingDevices = self.discovery?.getDevices() ?? []
+            
+            for device in existingDevices {
+                self.deviceSendProgress[device.id] = SendProgress()
+                self.discoveredDevices.append(device)
+            }
         }
     }
-    
+
     func resetProgress() {
         for key in deviceSendProgress.keys {
             deviceSendProgress[key] = SendProgress()
