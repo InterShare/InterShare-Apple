@@ -40,6 +40,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     @Published public var showReceivingDialog = false
     @Published public var receiveProgress: ReceiveProgress?
     @Published public var galleryLocalLink: String?
+    @Published public var loadingPhotos = false
     
     
     @Published public var deviceName: String = "" {
@@ -53,6 +54,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     @Published public var imageSelection: [PhotosPickerItem] = [] {
         didSet {
             if !imageSelection.isEmpty {
+                loadingPhotos = true
                 self.selectedFileURLs = []
                 self.clipboard = nil
 
@@ -70,7 +72,8 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
                     }
 
                     DispatchQueue.main.async {
-                        self.showDeviceSelectionSheet = true
+                        self.loadingPhotos = false
+                        self.showShareSheet()
                         self.imageSelection = []
                     }
                 }
@@ -95,6 +98,17 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
         Task {
             await initializeServer(deviceName: deviceName)
         }
+    }
+    
+    init() async {
+        let deviceName = userDefaults.string(forKey: "deviceName")
+        if let deviceName = deviceName {
+            await initializeServer(deviceName: deviceName)
+        }
+    }
+    
+    func showShareSheet() {
+        self.showDeviceSelectionSheet = true
     }
     
 #if os(macOS)
@@ -241,6 +255,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
 #if os(iOS)
             self.currentConnectionRequest = request
             if request.getIntentType() == .clipboard {
+                let _ = request.accept()
                 self.showClipboardActionsDialog = true
             } else {
                 self.showConnectionRequestDialog = true
@@ -279,8 +294,13 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     }
     
     public func shareClipboard() {
+#if os(macOS)
+        let pasteboard = NSPasteboard.general
+        let content = pasteboard.string(forType: .string)
+#else
         let content = UIPasteboard.general.string
-        
+#endif
+
         if content?.isEmpty == false {
             clipboard = content
             self.showDeviceSelectionSheet = true
@@ -292,6 +312,14 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
             return
         }
         
-        UIPasteboard.general.string = intent.clipboardContent
+        let content = intent.clipboardContent
+
+#if os(macOS)
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(content, forType: .string)
+#else
+        UIPasteboard.general.string = content
+#endif
     }
 }

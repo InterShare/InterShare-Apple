@@ -70,7 +70,7 @@ class ShareViewModel: ObservableObject, ShareProgressDelegate {
         self.isReady = false
         
         Task {
-            self.shareStore = await self.nearbyServer.share(urls: urls, allowConvenienceShare: true, progress: self)
+            self.shareStore = await self.nearbyServer.share(urls: urls, allowConvenienceShare: false, progress: self)
         }
     }
     
@@ -82,7 +82,7 @@ class ShareViewModel: ObservableObject, ShareProgressDelegate {
         self.isReady = true
         
         Task {
-            self.shareStore = await self.nearbyServer.share(text: text, allowConvenienceShare: true)
+            self.shareStore = await self.nearbyServer.share(text: text, allowConvenienceShare: false)
         }
     }
 

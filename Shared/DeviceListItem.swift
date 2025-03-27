@@ -161,7 +161,7 @@ struct DeviceInfoListView: View {
                 .foregroundColor(.primary)
                 .frame(maxWidth: 90)
                 .truncationMode(.tail)
-            
+
             Text(getText(progress))
                 .lineLimit(1)
                 .font(.system(size: 10, weight: .regular, design: .rounded))

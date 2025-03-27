@@ -8,14 +8,38 @@
 import SwiftUI
 
 #if os(macOS)
+import os
+
+extension Notification.Name {
+  static let receivedURLsNotification = Notification.Name("ReceivedURLsNotification")
+}
+
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         guard let app = notification.object as? NSApplication else {
             fatalError("no application object")
         }
-        
+
         let window = app.windows.first
         window?.titlebarAppearsTransparent = true
+    }
+    
+    func application(_ application: NSApplication, open urls: [URL]) {
+        guard !urls.isEmpty else { return }
+
+        Task {
+            let contentViewModel = await ContentViewModel()
+            let discovery = DiscoveryService()
+            var urlStrings: [String] = []
+            
+            for url in urls {
+                urlStrings.append(url.path().removingPercentEncoding!)
+                let _ = url.startAccessingSecurityScopedResource()
+            }
+
+            let popupWindow = ShareWindow(nearbyServer: contentViewModel.nearbyServer!, urls: urlStrings, clipboard: nil, discovery: discovery)
+            popupWindow.showWindow()
+        }
     }
 }
 #endif
@@ -30,7 +54,8 @@ struct InterShareApp: App {
 #if os(macOS)
         MenuBarExtra("InterShare", image: "MenuIcon") {
             ContentView()
-        }.menuBarExtraStyle(.window)
+        }
+        .menuBarExtraStyle(.window)
 #else
         WindowGroup {
             NavigationStack {

@@ -8,6 +8,8 @@
 
 import SwiftUI
 import AppKit
+import InterShareKit
+import DSFDockTile
 
 struct CustomButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
@@ -47,18 +49,20 @@ struct ContentView: View {
         }
         return "Unknown"
     }
+    
+    func showDetachedDialog() {
+        if let nearbyServer = viewModel.nearbyServer {
+            let discovery = DiscoveryService()
+            let popupWindow = ShareWindow(nearbyServer: nearbyServer, urls: viewModel.selectedFileURLs, clipboard: viewModel.clipboard, discovery: discovery)
+            popupWindow.showWindow()
+        }
+    }
 
     var body: some View {
         VStack(alignment: .leading) {
             Text("InterShare")
                 .bold()
                 .opacity(0.5)
-            
-            Divider()
-            
-            Button (action: {}) {
-                Text("Share Clipboard")
-            }
             
             Divider()
             
@@ -73,6 +77,14 @@ struct ContentView: View {
                     viewModel.changeAdvertisementState()
                 }
             }
+            
+            Button (action: {
+                viewModel.shareClipboard()
+                showDetachedDialog()
+            }) {
+                Text("Share Clipboard")
+            }
+            .buttonStyle(LuminareCompactButtonStyle())
             
             Divider()
             
@@ -94,11 +106,11 @@ struct ContentView: View {
                 .padding(.horizontal, 5)
                 .padding(.vertical, 0)
 
-            Link(destination: URL(string: "https://buymeacoffee.com/julianbaumann")!) {
-                Label("Buy me a coffee", systemImage: "cup.and.heat.waves")
-            }
-            .padding(.horizontal, 5)
-            .padding(.vertical, 0)
+//            Link(destination: URL(string: "https://buymeacoffee.com/julianbaumann")!) {
+//                Label("Buy me a coffee", systemImage: "cup.and.heat.waves")
+//            }
+//            .padding(.horizontal, 5)
+//            .padding(.vertical, 0)
             
             Divider()
             

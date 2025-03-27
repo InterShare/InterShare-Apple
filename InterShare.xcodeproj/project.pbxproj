@@ -37,6 +37,8 @@
 		0A5E3F2A2CC5A11F00AA2A27 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD8C702B6ACC6D00F83E75 /* Helper.swift */; };
 		0A5E3F2B2CC5A11F00AA2A27 /* DiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9D71EE2B63AEA700618EA7 /* DiscoveryService.swift */; };
 		0A5E3F302CC5A12400AA2A27 /* DynamicNotchKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0A5E3F2F2CC5A12400AA2A27 /* DynamicNotchKit */; };
+		0A653D362D90554E00FB7846 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AEC7C1B299BA2FB005BBB0E /* Assets.xcassets */; };
+		0A653D372D90554E00FB7846 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AEC7C1B299BA2FB005BBB0E /* Assets.xcassets */; };
 		0A69D4392CC3E3BF0066A19E /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 0A69D42F2CC3E3BF0066A19E /* ShareExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0A6C60C32A88D2AD003ADA7A /* IpHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6C60C22A88D2AD003ADA7A /* IpHelper.swift */; };
 		0A7C07472B8BFDF700209877 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7C07462B8BFDF700209877 /* CircularProgressView.swift */; };
@@ -64,6 +66,13 @@
 		0AF4971C2CC6E46A0049DAC3 /* InterShareSDKFFI.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AF497182CC6E4570049DAC3 /* InterShareSDKFFI.xcframework */; };
 		0AF497202CC6E4710049DAC3 /* InterShareKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0AF4971F2CC6E4710049DAC3 /* InterShareKit */; };
 		0AF497212CC6E4710049DAC3 /* InterShareSDKFFI.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AF497182CC6E4570049DAC3 /* InterShareSDKFFI.xcframework */; };
+		0AF4A9DE2D87529300A8ACE9 /* ShareSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4A9DC2D87529300A8ACE9 /* ShareSheetView.swift */; };
+		0AF4A9F32D87598F00A8ACE9 /* ShareWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4A9F22D87598E00A8ACE9 /* ShareWindow.swift */; };
+		0AF4A9F62D87673A00A8ACE9 /* ShareSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4A9DC2D87529300A8ACE9 /* ShareSheetView.swift */; };
+		0AF4A9F82D876E8300A8ACE9 /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4A9F72D876E8000A8ACE9 /* ButtonStyle.swift */; };
+		0AF4A9F92D876E8300A8ACE9 /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4A9F72D876E8000A8ACE9 /* ButtonStyle.swift */; };
+		0AF4A9FA2D876E8300A8ACE9 /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4A9F72D876E8000A8ACE9 /* ButtonStyle.swift */; };
+		0AF4AA4F2D87951F00A8ACE9 /* DSFDockTile in Frameworks */ = {isa = PBXBuildFile; platformFilters = (macos, ); productRef = 0AF4AA4E2D87951F00A8ACE9 /* DSFDockTile */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -152,6 +161,9 @@
 		0AEC7C1F299BA2FB005BBB0E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0AF497122CC6B2190049DAC3 /* LocalNetworkAuthorization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNetworkAuthorization.swift; sourceTree = "<group>"; };
 		0AF497182CC6E4570049DAC3 /* InterShareSDKFFI.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = InterShareSDKFFI.xcframework; path = "../../intershare-sdk/bindings/swift/InterShareSDKFFI.xcframework"; sourceTree = "<group>"; };
+		0AF4A9DC2D87529300A8ACE9 /* ShareSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetView.swift; sourceTree = "<group>"; };
+		0AF4A9F22D87598E00A8ACE9 /* ShareWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareWindow.swift; sourceTree = "<group>"; };
+		0AF4A9F72D876E8000A8ACE9 /* ButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -199,6 +211,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0A2E94F42D464FBA00224218 /* InterShareAppClip */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (0A2E95032D464FBC00224218 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = InterShareAppClip; sourceTree = "<group>"; };
 		0A5E3F112CC5A09300AA2A27 /* MacShareExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (0A5E3F1E2CC5A09300AA2A27 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = MacShareExtension; sourceTree = "<group>"; };
+		0A653D022D8F092400FB7846 /* Models */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Models; sourceTree = "<group>"; };
 		0A69D4302CC3E3BF0066A19E /* ShareExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (0A69D43D2CC3E3BF0066A19E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ShareExtension; sourceTree = "<group>"; };
 		0A69D4402CC3E7AD0066A19E /* ViewModels */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (0A1065202CC3E979002C8745 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 0A5E3F2C2CC5A11F00AA2A27 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ViewModels; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -238,6 +251,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0A5E3EE72CC59C7200AA2A27 /* DynamicNotchKit in Frameworks */,
+				0AF4AA4F2D87951F00A8ACE9 /* DSFDockTile in Frameworks */,
 				0AF497172CC6E42D0049DAC3 /* InterShareKit in Frameworks */,
 				0A8D6CC42CC577AD00BD251F /* DynamicNotchKit in Frameworks */,
 				0A20C22B2CC7B7860005A338 /* InterShareSDKFFI.xcframework in Frameworks */,
@@ -250,10 +264,13 @@
 		0A69D43F2CC3E7320066A19E /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				0A653D022D8F092400FB7846 /* Models */,
+				0AF4A9F72D876E8000A8ACE9 /* ButtonStyle.swift */,
 				0ABEE9E82D57EF2900BFC4BC /* ViewExtensions.swift */,
 				0AF497122CC6B2190049DAC3 /* LocalNetworkAuthorization.swift */,
 				0A69D4402CC3E7AD0066A19E /* ViewModels */,
 				0A0479E8299D56A200CF5566 /* DeviceListItem.swift */,
+				0AF4A9DC2D87529300A8ACE9 /* ShareSheetView.swift */,
 				0A1C35232B60F32200BBE6C3 /* ShareView.swift */,
 				0A7C07462B8BFDF700209877 /* CircularProgressView.swift */,
 				0A10652A2CC533EF002C8745 /* BluetoothDisabledWarningView.swift */,
@@ -267,6 +284,7 @@
 		0A98C7CA2B9A6FFA00BBD4C0 /* Mac */ = {
 			isa = PBXGroup;
 			children = (
+				0AF4A9F22D87598E00A8ACE9 /* ShareWindow.swift */,
 				0A98C7CC2B9A708E00BBD4C0 /* ContentView+mac.swift */,
 				0A98C7CE2B9A722E00BBD4C0 /* VisualEffectView.swift */,
 				0A2686112CC5B74A0011A9FD /* MenuButtonView.swift */,
@@ -410,6 +428,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				0A5E3F112CC5A09300AA2A27 /* MacShareExtension */,
+				0A653D022D8F092400FB7846 /* Models */,
 			);
 			name = MacShareExtension;
 			packageProductDependencies = (
@@ -433,6 +452,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				0A653D022D8F092400FB7846 /* Models */,
 				0A69D4302CC3E3BF0066A19E /* ShareExtension */,
 			);
 			name = ShareExtension;
@@ -460,6 +480,7 @@
 				0A5E3F1C2CC5A09300AA2A27 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
+				0A653D022D8F092400FB7846 /* Models */,
 				0A69D4402CC3E7AD0066A19E /* ViewModels */,
 			);
 			name = InterShare;
@@ -467,6 +488,7 @@
 				0A8D6CC32CC577AD00BD251F /* DynamicNotchKit */,
 				0A5E3EE62CC59C7200AA2A27 /* DynamicNotchKit */,
 				0AF497162CC6E42D0049DAC3 /* InterShareKit */,
+				0AF4AA4E2D87951F00A8ACE9 /* DSFDockTile */,
 			);
 			productName = InterShare;
 			productReference = 0AEC7C14299BA2FA005BBB0E /* InterShare.app */;
@@ -509,6 +531,7 @@
 				0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../intershare-sdk" */,
 				0A5E3EE52CC59C7200AA2A27 /* XCLocalSwiftPackageReference "../../../DynamicNotchKit" */,
 				0A2E950D2D46853900224218 /* XCRemoteSwiftPackageReference "FluidGradient" */,
+				0AF4AA4D2D87951F00A8ACE9 /* XCRemoteSwiftPackageReference "DSFDockTile" */,
 			);
 			productRefGroup = 0AEC7C15299BA2FA005BBB0E /* Products */;
 			projectDirPath = "";
@@ -534,6 +557,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A653D372D90554E00FB7846 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -541,6 +565,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A653D362D90554E00FB7846 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -571,9 +596,11 @@
 				0A5E3F252CC5A11F00AA2A27 /* DeviceListItem.swift in Sources */,
 				0A5E3F262CC5A11F00AA2A27 /* ShareView.swift in Sources */,
 				0A5E3F272CC5A11F00AA2A27 /* CircularProgressView.swift in Sources */,
+				0AF4A9DE2D87529300A8ACE9 /* ShareSheetView.swift in Sources */,
 				0A5E3F282CC5A11F00AA2A27 /* BluetoothDisabledWarningView.swift in Sources */,
 				0A5E3F292CC5A11F00AA2A27 /* ConnectionRequestView.swift in Sources */,
 				0A5E3F2A2CC5A11F00AA2A27 /* Helper.swift in Sources */,
+				0AF4A9FA2D876E8300A8ACE9 /* ButtonStyle.swift in Sources */,
 				0A5E3F2B2CC5A11F00AA2A27 /* DiscoveryService.swift in Sources */,
 				0ABCB5512D20161F00439A47 /* GalleryService.swift in Sources */,
 				0ABEE9EA2D57EF3200BFC4BC /* ViewExtensions.swift in Sources */,
@@ -593,6 +620,7 @@
 				0A1065232CC3EA3A002C8745 /* Helper.swift in Sources */,
 				0A10651E2CC3E979002C8745 /* DeviceListItem.swift in Sources */,
 				0A10651F2CC3E979002C8745 /* ShareView.swift in Sources */,
+				0AF4A9F92D876E8300A8ACE9 /* ButtonStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -610,14 +638,17 @@
 				0A6C60C32A88D2AD003ADA7A /* IpHelper.swift in Sources */,
 				0A9D71EF2B63AEA700618EA7 /* DiscoveryService.swift in Sources */,
 				0ACD8C6D2B6AC8CD00F83E75 /* ReceiveContentView.swift in Sources */,
+				0AF4A9F82D876E8300A8ACE9 /* ButtonStyle.swift in Sources */,
 				0A7C07472B8BFDF700209877 /* CircularProgressView.swift in Sources */,
 				0A98C7CD2B9A708E00BBD4C0 /* ContentView+mac.swift in Sources */,
 				0A10652C2CC533F9002C8745 /* BluetoothDisabledWarningView.swift in Sources */,
 				0ACD8C712B6ACC6D00F83E75 /* Helper.swift in Sources */,
 				0ABEE9EB2D57EF3200BFC4BC /* ViewExtensions.swift in Sources */,
+				0AF4A9F32D87598F00A8ACE9 /* ShareWindow.swift in Sources */,
 				0A1065312CC55BCA002C8745 /* ConnectionRequestView.swift in Sources */,
 				0A98C7CF2B9A722E00BBD4C0 /* VisualEffectView.swift in Sources */,
 				0A10652E2CC53870002C8745 /* ReadyToReceiveView.swift in Sources */,
+				0AF4A9F62D87673A00A8ACE9 /* ShareSheetView.swift in Sources */,
 				0A19E44B2B5C48E3007DB15A /* PulseView.swift in Sources */,
 				0A0479EB299D61DF00CF5566 /* ViewExtension.swift in Sources */,
 			);
@@ -999,7 +1030,7 @@
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "InterShare requires Bluetooth to discover, connect, and communicate with nearby devices for secure file transfers when a shared Wi-Fi network is unavailable.";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "InterShare requires access to the local Wi-Fi network to discover, connect, and transfer files between devices quickly and securely, without needing an internet connection.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Save images and videos directly to the Photos app";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Save images and videos directly to the Photos app";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -1010,10 +1041,10 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MARKETING_VERSION = 0.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.julian-baumann.InterShare";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1048,7 +1079,7 @@
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "InterShare requires Bluetooth to discover, connect, and communicate with nearby devices for secure file transfers when a shared Wi-Fi network is unavailable.";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "InterShare requires access to the local Wi-Fi network to discover, connect, and transfer files between devices quickly and securely, without needing an internet connection.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Save images and videos directly to the Photos app";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Save images and videos directly to the Photos app";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -1059,10 +1090,10 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MARKETING_VERSION = 0.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.julian-baumann.InterShare";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1145,6 +1176,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		0AF4AA4D2D87951F00A8ACE9 /* XCRemoteSwiftPackageReference "DSFDockTile" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dagronf/DSFDockTile";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1185,6 +1224,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0AFC33862B3F0DD800448B3B /* XCLocalSwiftPackageReference "../../intershare-sdk" */;
 			productName = InterShareKit;
+		};
+		0AF4AA4E2D87951F00A8ACE9 /* DSFDockTile */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0AF4AA4D2D87951F00A8ACE9 /* XCRemoteSwiftPackageReference "DSFDockTile" */;
+			productName = DSFDockTile;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -30,33 +30,33 @@ struct ShareView: View {
     var body: some View {
         ScrollView {
             if (discoveryService.bluetoothEnabled) {
-                if discoveryService.discoveredDevices.count == 0 {
-                    VStack(alignment: .center) {
-                        ProgressView()
-#if os(macOS)
-                            .controlSize(.small)
-#endif
-                        Text("Looking for nearby devices")
-                            .bold()
-                            .padding(.bottom, 0)
-                            .opacity(0.7)
-                        
-                        Text("Make sure the receiver has the InterShare app open on their device.")
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: 300, alignment: .center)
-                            .padding(.top, 0)
-                            .opacity(0.6)
-                    }
-                    .padding()
-                    .padding(.top, 50)
-                }
+//                if discoveryService.discoveredDevices.count == 0 {
+//                    VStack(alignment: .center) {
+//                        ProgressView()
+//#if os(macOS)
+//                            .controlSize(.small)
+//#endif
+//                        Text("Looking for nearby devices")
+//                            .bold()
+//                            .padding(.bottom, 0)
+//                            .opacity(0.7)
+//                        
+//                        Text("Make sure the receiver has the InterShare app open on their device.")
+//                            .multilineTextAlignment(.center)
+//                            .frame(maxWidth: 300, alignment: .center)
+//                            .padding(.top, 0)
+//                            .opacity(0.6)
+//                    }
+//                    .padding()
+//                    .padding(.top, 50)
+//                }
                 
                 LazyVGrid(columns: adaptiveColumns, alignment: .leading, spacing: 15) {
                     ForEach(discoveryService.discoveredDevices, id: \.id) { device in
                         Button(action: {
-                            viewModel.send(device: device, progress: discoveryService.deviceSendProgress[device.id]!)
+                            viewModel.send(device: device.device, progress: device.progress)
                         }) {
-                            DeviceInfoListView(deviceInfo: device, progress: discoveryService.deviceSendProgress[device.id]!)
+                            DeviceInfoListView(deviceInfo: device.device, progress: device.progress)
                         }
                         .disabled(!viewModel.isReady)
                         .opacity(viewModel.isReady ? 1.0 : 0.4)
@@ -104,33 +104,37 @@ struct ShareView: View {
                     }
                     
                 } else {
+                    ProgressView()
+    #if os(macOS)
+                        .controlSize(.small)
+    #endif
                     VStack {
-                        Text("Scan to receive")
+                        Text("Looking for nearby devices")
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .bold()
                             .padding(.bottom, 0)
                             .opacity(0.7)
                         
-                        Text("No InterShare installation required. Just scan and receive.")
+                        Text("Make sure the receiver has the InterShare app open on their device.")
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.top, 0)
                             .opacity(0.6)
                     }
 
-                    if let imageData = viewModel.getQRCode(darkMode: colorScheme == .dark) {
-#if os(iOS)
-                        Image(uiImage: imageData)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100, height: 100)
-                            .clipShape(.rect(cornerRadius: 10))
-#elseif os(macOS)
-                        Image(nsImage: imageData)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100, height: 100)
-#endif
-                    }
+//                    if let imageData = viewModel.getQRCode(darkMode: colorScheme == .dark) {
+//#if os(iOS)
+//                        Image(uiImage: imageData)
+//                            .resizable()
+//                            .scaledToFit()
+//                            .frame(width: 100, height: 100)
+//                            .clipShape(.rect(cornerRadius: 10))
+//#elseif os(macOS)
+//                        Image(nsImage: imageData)
+//                            .resizable()
+//                            .scaledToFit()
+//                            .frame(width: 100, height: 100)
+//#endif
+//                    }
                 }
             }
             .frame(maxWidth: .infinity)

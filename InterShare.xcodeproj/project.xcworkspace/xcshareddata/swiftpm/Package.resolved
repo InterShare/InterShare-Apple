@@ -1,6 +1,24 @@
 {
-  "originHash" : "d04ea2c1b231c6ac1493bb67bf6c133a7f676790be9ca356cb22adfbc5b6fb94",
+  "originHash" : "2967c995c08a98b1db705f7b23c0a72cc4efabf1db8c7d186938e3a0de3c2883",
   "pins" : [
+    {
+      "identity" : "dsfdocktile",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dagronf/DSFDockTile",
+      "state" : {
+        "revision" : "921840f138ece177c9c636958434d674d9d42d72",
+        "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "dsfimageflipbook",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dagronf/DSFImageFlipbook",
+      "state" : {
+        "revision" : "8b6e1e7f862c1d39ce34c59705f9fa731d9fd539",
+        "version" : "1.0.1"
+      }
+    },
     {
       "identity" : "fluidgradient",
       "kind" : "remoteSourceControl",

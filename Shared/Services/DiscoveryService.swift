@@ -20,8 +20,7 @@ class DiscoveryService: ObservableObject, DiscoveryDelegate {
     let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
 #endif
 
-    @Published public var discoveredDevices: [Device] = []
-    @Published public var deviceSendProgress: [String: SendProgress] = [:]
+    @Published public var discoveredDevices: [DiscoveredDevice] = []
     @Published public var bluetoothEnabled = true
     
     private func startInternalScan() {
@@ -59,36 +58,36 @@ class DiscoveryService: ObservableObject, DiscoveryDelegate {
         }
         
         DispatchQueue.main.async {
-            self.discoveredDevices.removeAll()
             self.resetProgress()
+            self.discoveredDevices.removeAll()
             self.shouldStartScan = true
             self.startInternalScan()
-            
+
             let existingDevices = self.discovery?.getDevices() ?? []
             
             for device in existingDevices {
-                self.deviceSendProgress[device.id] = SendProgress()
-                self.discoveredDevices.append(device)
+                self.discoveredDevices.append(DiscoveredDevice(device: device, progress: SendProgress()))
             }
         }
     }
 
     func resetProgress() {
-        for key in deviceSendProgress.keys {
-            deviceSendProgress[key] = SendProgress()
+        for device in discoveredDevices {
+            print("Resetting progress for \(device.device.name)")
+            device.resetProgress()
         }
     }
 
     func deviceAdded(value: Device) {
         DispatchQueue.main.async {
-            self.deviceSendProgress[value.id] = SendProgress()
-            let indexOfExisting = self.discoveredDevices.firstIndex(where: { device in device.id == value.id }) ?? -1
+//            self.deviceSendProgress[value.id] = SendProgress()
+            let indexOfExisting = self.discoveredDevices.firstIndex(where: { device in device.device.id == value.id }) ?? -1
             
             if (indexOfExisting >= 0) {
-                self.discoveredDevices[indexOfExisting] = value
+                self.discoveredDevices[indexOfExisting].device = value
+                self.discoveredDevices[indexOfExisting].resetProgress()
             } else {
-                self.discoveredDevices.append(value)
-                
+                self.discoveredDevices.append(DiscoveredDevice(device: value, progress: SendProgress()))
 #if os(iOS)
                 self.impactFeedback.impactOccurred()
 #endif
@@ -98,8 +97,7 @@ class DiscoveryService: ObservableObject, DiscoveryDelegate {
     
     func deviceRemoved(deviceId: String) {
         DispatchQueue.main.async {
-            self.discoveredDevices.removeAll { $0.id == deviceId }
-            self.deviceSendProgress.removeValue(forKey: deviceId)
+            self.discoveredDevices.removeAll { $0.device.id == deviceId }
         }
     }
     

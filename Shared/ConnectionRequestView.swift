@@ -13,6 +13,7 @@ import InterShareKit
 struct ConnectionRequestView: View {
     var close: () -> Void
     var connectionRequest: ConnectionRequest?
+    @Environment(\.openURL) private var openURL
     @StateObject var receiveProgress: ReceiveProgress = ReceiveProgress()
     @State var showProgress: Bool = false
     @State private var dynamicWidth: CGFloat = 300
@@ -39,6 +40,16 @@ struct ConnectionRequestView: View {
         }
         
         return Color(red: 0, green: 0, blue: 0, opacity: 0.0)
+    }
+    
+    public func copySharedTextToClipboard(request: ConnectionRequest) {
+        guard let intent = request.getClipboardIntent() else {
+            return
+        }
+
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(intent.clipboardContent, forType: .string)
     }
     
     var body: some View {
@@ -99,10 +110,11 @@ struct ConnectionRequestView: View {
                         
                         Button("Cancel") {
                             Task {
-                                await connectionRequest?.cancel()
+                                connectionRequest?.cancel()
                             }
                         }
-                        .buttonStyle(.bordered)
+                        .buttonStyle(LuminareCompactButtonStyle())
+                        .frame(maxWidth: 80, maxHeight: 30)
                         .controlSize(.large)
                     }
                 }
@@ -114,45 +126,87 @@ struct ConnectionRequestView: View {
                         .padding(.trailing, 5)
                     
                     VStack() {
-                        if (connectionRequest?.getFileTransferIntent()?.fileCount == 1) {
-                            Text("\(connectionRequest?.getSender().name ?? "Unknown") wants to send you \(connectionRequest?.getFileTransferIntent()?.fileName ?? "")")
+                        if connectionRequest?.getIntentType() == .clipboard {
+                            Text("\(connectionRequest?.getSender().name ?? "Unknown") shared this text with you:")
                                 .fixedSize(horizontal: false, vertical: true)
+                            
+                            Text("\(connectionRequest?.getClipboardIntent()?.clipboardContent ?? "")")
+                                .fixedSize(horizontal: false, vertical: true)
+                                .lineLimit(2)
+                                .opacity(0.6)
                         } else {
-                            Text("\(connectionRequest?.getSender().name ?? "Unknown") wants to send you \(connectionRequest?.getFileTransferIntent()?.fileCount.description ?? "some") files")
-                                .fixedSize(horizontal: false, vertical: true)
+                            if (connectionRequest?.getFileTransferIntent()?.fileCount == 1) {
+                                Text("\(connectionRequest?.getSender().name ?? "Unknown") wants to send you \(connectionRequest?.getFileTransferIntent()?.fileName ?? "")")
+                                    .fixedSize(horizontal: false, vertical: true)
+                            } else {
+                                Text("\(connectionRequest?.getSender().name ?? "Unknown") wants to send you \(connectionRequest?.getFileTransferIntent()?.fileCount.description ?? "some") files")
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
                         }
-                        
                     }
                 }
                 
-                HStack {
-                    Button("Decline") {
-                        connectionRequest?.decline()
-                        close()
-                    }
-                        .buttonStyle(.bordered)
+                if connectionRequest?.getIntentType() == .clipboard {
+                    HStack {
+                        Button("Cancel", role: .destructive) {
+                            connectionRequest?.decline()
+                            close()
+                        }
+                        .foregroundStyle(.red)
+                        .buttonStyle(LuminareCompactButtonStyle())
                         .controlSize(.large)
-                    
-                    Button("Accept") {
-                        connectionRequest?.setProgressDelegate(delegate: receiveProgress)
-                        self.receiveProgress.completionHandler = {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                        
+                        Button("Copy") {
+                            copySharedTextToClipboard(request: connectionRequest!)
+                            close()
+                        }
+                        .buttonStyle(LuminareCompactButtonStyle())
+                        .controlSize(.large)
+                        
+                        if connectionRequest?.isLink() == true {
+                            Button("Open Link") {
+                                if let url = URL(string: connectionRequest?.getClipboardIntent()?.clipboardContent ?? "") {
+                                    openURL(url)
+                                }
+
                                 close()
                             }
-                        }
-
-                        Thread {
-                            let _ = connectionRequest?.accept()
-                        }.start()
-                        
-                        showProgress = true
-                        
-                        withAnimation(Animation.timingCurve(0.16, 1, 0.3, 1, duration: 0.7)) {
-                            dynamicWidth = 190
+                            .buttonStyle(LuminareCompactButtonStyle())
+                            .controlSize(.large)
                         }
                     }
-                        .buttonStyle(.bordered)
+                } else {
+                    HStack {
+                        
+                        Button("Decline", role: .destructive) {
+                            connectionRequest?.decline()
+                            close()
+                        }
+                        .foregroundStyle(.red)
+                        .buttonStyle(LuminareCompactButtonStyle())
                         .controlSize(.large)
+
+                        Button("Accept") {
+                            connectionRequest?.setProgressDelegate(delegate: receiveProgress)
+                            self.receiveProgress.completionHandler = {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                                    close()
+                                }
+                            }
+
+                            Thread {
+                                let _ = connectionRequest?.accept()
+                            }.start()
+                            
+                            showProgress = true
+                            
+                            withAnimation(Animation.timingCurve(0.16, 1, 0.3, 1, duration: 0.7)) {
+                                dynamicWidth = 190
+                            }
+                        }
+                        .buttonStyle(LuminareCompactButtonStyle())
+                        .controlSize(.large)
+                    }
                 }
             }
         }

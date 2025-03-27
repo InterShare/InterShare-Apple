@@ -16,7 +16,8 @@ struct ContentView: View {
     @ObservedObject var viewModel = ContentViewModel()
     @State private var animateGradient = true
     @State private var showFileImporter = false
-    
+    @Environment(\.openURL) private var openURL
+
     let discovery = DiscoveryService()
     
     init() {
@@ -34,7 +35,7 @@ struct ContentView: View {
     
     func getRequestText() -> String {
         if viewModel.currentConnectionRequest?.getIntentType() == .clipboard {
-            return (viewModel.currentConnectionRequest?.getSender().name ?? "Unknown") + " wants to send you a text"
+            return (viewModel.currentConnectionRequest?.getSender().name ?? "Unknown") + " shared a text"
         }
         
         if (viewModel.currentConnectionRequest?.getFileTransferIntent()?.fileCount == 1) {
@@ -134,15 +135,23 @@ struct ContentView: View {
                             photoLibrary: .shared()
                         ) {
                             VStack {
-                                Image(systemName: "photo.on.rectangle.angled")
-                                
-                                Text("Photos")
-                                    .padding(.top, 1)
+                                if viewModel.loadingPhotos {
+                                    ProgressView()
+                                        .tint(Color("ButtonTextColor"))
+                                    
+                                    Text("Photos")
+                                        .padding(.top, 0)
+                                } else {
+                                    Image(systemName: "photo.on.rectangle.angled")
+                                    
+                                    Text("Photos")
+                                        .padding(.top, 1)
+                                }
                             }
                             .frame(maxWidth: .infinity)
                             .frame(height: 60)
                         }
-                        .disabled(!viewModel.isPoweredOn)
+                        .disabled(!viewModel.isPoweredOn || viewModel.loadingPhotos)
                         .buttonStyle(.borderedProminent)
 //                        .buttonBorderShape(.roundedRectangle)
                         .buttonBorderShape(.roundedRectangle(radius: 25))
@@ -161,7 +170,7 @@ struct ContentView: View {
                             .frame(maxWidth: .infinity)
                             .frame(height: 60)
                         }
-                        .disabled(!viewModel.isPoweredOn)
+                        .disabled(!viewModel.isPoweredOn || viewModel.loadingPhotos)
                         .buttonStyle(.borderedProminent)
 //                        .buttonBorderShape(.roundedRectangle)
                         .buttonBorderShape(.roundedRectangle(radius: 25))
@@ -197,7 +206,7 @@ struct ContentView: View {
                             .frame(maxWidth: .infinity)
                             .frame(height: 60)
                         }
-                        .disabled(!viewModel.isPoweredOn)
+                        .disabled(!viewModel.isPoweredOn || viewModel.loadingPhotos)
                         .buttonStyle(.borderedProminent)
 //                        .buttonBorderShape(.roundedRectangle)
                         .buttonBorderShape(.roundedRectangle(radius: 25))
@@ -282,6 +291,13 @@ struct ContentView: View {
                 isPresented: $viewModel.showClipboardActionsDialog,
                 presenting: viewModel.currentConnectionRequest
             ) { request in
+                if request.isLink() {
+                    Button("Open Link") {
+                        if let url = URL(string: request.getClipboardIntent()?.clipboardContent ?? "") {
+                            openURL(url)
+                        }
+                    }
+                }
                 Button("Copy") {
                     viewModel.copySharedTextToClipboard(request: request)
                 }
@@ -292,21 +308,23 @@ struct ContentView: View {
                 }
             } message: { request in
                 Text("\"\(request.getClipboardIntent()?.clipboardContent ?? "")\"")
+                .lineLimit(5)
             }
             
             .sheet(isPresented: $viewModel.showDeviceSelectionSheet, onDismiss: viewModel.onDeviceListSheetDismissed) {
                 if let nearbyServer = viewModel.nearbyServer {
-
-                    ShareView(nearbyServer: nearbyServer, urls: viewModel.selectedFileURLs, clipboard: viewModel.clipboard)
-                        .padding(.top, 10)
-                        .environmentObject(discovery)
-                        .presentationCornerRadius(30)
-                        .presentationBackground(.regularMaterial)
-//                        .interactiveDismissDisabled()
-//                        .onDisappear {
-//                            print("Discovery closed")
-//                            discovery.close()
-//                        }
+                    NavigationStack {
+                        ShareView(nearbyServer: nearbyServer, urls: viewModel.selectedFileURLs, clipboard: viewModel.clipboard)
+                            .environmentObject(discovery)
+                            .interactiveDismissDisabled()
+                            .toolbar(content: {
+                                ToolbarItem(placement: .confirmationAction) {
+                                    Button("Done") {
+                                        viewModel.showDeviceSelectionSheet = false
+                                    }
+                                }
+                            })
+                    }
                 }
             }
             .onChange(of: viewModel.showDeviceSelectionSheet) { isPresented in

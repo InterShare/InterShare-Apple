@@ -12,6 +12,7 @@ struct ShareSheetView: View {
     @EnvironmentObject var discovery: DiscoveryService
     public var nearbyServer: NearbyServer
     public var urls: [String]
+    public var clipboard: String?
     public var close: () -> Void
     
     var body: some View {
@@ -23,7 +24,7 @@ struct ShareSheetView: View {
             Divider()
                 .padding(0)
             
-            ShareView(nearbyServer: nearbyServer, urls: urls)
+            ShareView(nearbyServer: nearbyServer, urls: urls, clipboard: clipboard)
                 .environmentObject(discovery)
                 .onAppear {
                     self.discovery.startScan()
@@ -38,5 +39,6 @@ struct ShareSheetView: View {
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(10)
         }
+        .edgesIgnoringSafeArea(.top)
     }
 }
