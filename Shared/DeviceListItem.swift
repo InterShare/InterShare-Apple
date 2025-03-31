@@ -108,7 +108,6 @@ struct DeviceInfoListView: View {
 #else
                 .frame(width: 70, height: 70)
 #endif
-                
                 .overlay(Group {
                     ZStack {
                         if versionCompatibility != .compatible {

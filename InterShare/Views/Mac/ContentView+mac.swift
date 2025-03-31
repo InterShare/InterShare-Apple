@@ -9,7 +9,6 @@
 import SwiftUI
 import AppKit
 import InterShareKit
-import DSFDockTile
 
 struct CustomButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {

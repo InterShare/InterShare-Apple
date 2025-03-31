@@ -15,6 +15,7 @@ import DynamicNotchKit
 class ContentViewModel: ObservableObject, NearbyServerDelegate {
     private var incomingThread: Thread?
     private var myDevice: Device?
+    private var shouldStartAdvertising = true
 
 #if os(macOS)
     let userDefaults = UserDefaults(suiteName: "PBYG8F53RH.com.julian-baumann.InterShare")!
@@ -101,6 +102,8 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     }
     
     init() async {
+        shouldStartAdvertising = false
+
         let deviceName = userDefaults.string(forKey: "deviceName")
         if let deviceName = deviceName {
             await initializeServer(deviceName: deviceName)
@@ -156,7 +159,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
         }
 
         var deviceType = DeviceType.unknown
-        
+
 #if os(iOS)
         let idiom = await UIDevice.current.userInterfaceIdiom
 
@@ -223,9 +226,11 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
     
     func nearbyServerDidUpdateState(state: BluetoothState) {
         isPoweredOn = state == .poweredOn
-        advertisementEnabled = isPoweredOn
-
-        changeAdvertisementState()
+        
+        if shouldStartAdvertising {
+            advertisementEnabled = isPoweredOn
+            changeAdvertisementState()
+        }
     }
     
     func changeAdvertisementState() {
