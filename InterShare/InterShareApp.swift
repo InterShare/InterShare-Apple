@@ -60,9 +60,6 @@ struct InterShareApp: App {
         WindowGroup {
             NavigationStack {
                 ContentView()
-                    .toolbar {
-                        Color.clear
-                    }
             }
         }
 #endif

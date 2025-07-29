@@ -54,9 +54,7 @@ struct ReceiveContentView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(.thinMaterial)
-                .cornerRadius(15)
-                .shadow(radius: 10)
+                .glassEffectRectCard()
                 .padding()
                 
                 switch(progress.state)
@@ -81,11 +79,7 @@ struct ReceiveContentView: View {
                             .padding(.vertical, 10)
                             .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.bordered)
-#if os(iOS)
-                    .buttonBorderShape(.capsule)
-#endif
-                    .tint(.red)
+                    .destructiveButtonStyle()
                     .padding(.horizontal)
                     
                     .onAppear {
@@ -108,7 +102,7 @@ struct ReceiveContentView: View {
                     
 #if os(iOS)
                     Button(action: {
-                        if let galleryLinkId {
+                        if galleryLinkId != nil {
                             if let url = URL(string: "photos-redirect://"), UIApplication.shared.canOpenURL(url) {
                                 print(url)
                                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -123,10 +117,7 @@ struct ReceiveContentView: View {
                             .padding(.vertical, 10)
                             .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.borderedProminent)
-                    .buttonBorderShape(.capsule)
-                    .tint(Color("ButtonTint"))
-                    .foregroundStyle(Color("ButtonTextColor"))
+                    .prominentButtonStyle()
                     .padding(.horizontal)
 #endif
                     
@@ -135,11 +126,7 @@ struct ReceiveContentView: View {
                             .padding(.vertical, 10)
                             .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.bordered)
-                    .tint(Color("ReceivedFilesTint"))
-#if os(iOS)
-                    .buttonBorderShape(.capsule)
-#endif
+                    .secondaryButtonStyle()
                     .padding(.horizontal)
                     
                     .onAppear {
@@ -162,11 +149,7 @@ struct ReceiveContentView: View {
                             .padding(.vertical, 10)
                             .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.bordered)
-                    .tint(Color("ReceivedFilesTint"))
-#if os(iOS)
-                    .buttonBorderShape(.capsule)
-#endif
+                    .secondaryButtonStyle()
                     .padding(.horizontal)
     
                 default:
@@ -187,17 +170,14 @@ struct ReceiveContentView: View {
                             .padding(.vertical, 10)
                             .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.bordered)
-                    .tint(Color("ReceivedFilesTint"))
-#if os(iOS)
-                    .buttonBorderShape(.capsule)
-#endif
+                    .secondaryButtonStyle()
                     .padding(.horizontal)
                 }
             }
             
         }
         .frame(maxHeight: .infinity, alignment: .top)
+        .background(.background)
         .navigationTitle("Receiving")
     }
 }

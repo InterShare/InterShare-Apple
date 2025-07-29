@@ -84,8 +84,10 @@ class ShareViewController: UIViewController, NearbyServerDelegate {
                     .environmentObject(self.discovery)
                     .toolbar(content: {
                         ToolbarItem(placement: .confirmationAction) {
-                            Button("Done") {
+                            Button {
                                 self.close()
+                            } label: {
+                                Image(systemName: "xmark")
                             }
                         }
                     })

@@ -149,7 +149,7 @@ class ContentViewModel: ObservableObject, NearbyServerDelegate {
         
 //         Asking for local network permissions beforehand, so it also works in the share extension.
         if (askedForLocalNetworkPermission == false) {
-            let _ = await LocalNetworkAuthorization().requestAuthorization()
+//            let _ = await LocalNetworkAuthorization().requestAuthorization()
             userDefaults.set(true, forKey: "askedForLocalNetworkPermission")
         }
         

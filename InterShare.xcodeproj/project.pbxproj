@@ -49,6 +49,9 @@
 		0ABEE9EB2D57EF3200BFC4BC /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABEE9E82D57EF2900BFC4BC /* ViewExtensions.swift */; };
 		0ACD8C6D2B6AC8CD00F83E75 /* ReceiveContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD8C6C2B6AC8CD00F83E75 /* ReceiveContentView.swift */; };
 		0ACD8C712B6ACC6D00F83E75 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD8C702B6ACC6D00F83E75 /* Helper.swift */; };
+		0AD813F12E01610000952862 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 0AD813F02E01610000952862 /* AppIcon.icon */; };
+		0AD813F22E01610000952862 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 0AD813F02E01610000952862 /* AppIcon.icon */; };
+		0AD813F32E01610000952862 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 0AD813F02E01610000952862 /* AppIcon.icon */; };
 		0AEC7C18299BA2FA005BBB0E /* InterShareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC7C17299BA2FA005BBB0E /* InterShareApp.swift */; };
 		0AEC7C1A299BA2FA005BBB0E /* ContentView+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC7C19299BA2FA005BBB0E /* ContentView+iOS.swift */; };
 		0AEC7C1C299BA2FB005BBB0E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AEC7C1B299BA2FB005BBB0E /* Assets.xcassets */; };
@@ -135,6 +138,7 @@
 		0ABEE9E82D57EF2900BFC4BC /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		0ACD8C6C2B6AC8CD00F83E75 /* ReceiveContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveContentView.swift; sourceTree = "<group>"; };
 		0ACD8C702B6ACC6D00F83E75 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		0AD813F02E01610000952862 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		0AEC7C14299BA2FA005BBB0E /* InterShare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InterShare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AEC7C17299BA2FA005BBB0E /* InterShareApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterShareApp.swift; sourceTree = "<group>"; };
 		0AEC7C19299BA2FA005BBB0E /* ContentView+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView+iOS.swift"; sourceTree = "<group>"; };
@@ -283,6 +287,7 @@
 		0AEC7C0B299BA2FA005BBB0E = {
 			isa = PBXGroup;
 			children = (
+				0AD813F02E01610000952862 /* AppIcon.icon */,
 				0A69D43F2CC3E7320066A19E /* Shared */,
 				0AEC7C28299BA385005BBB0E /* Packages */,
 				0AEC7C16299BA2FA005BBB0E /* InterShare */,
@@ -489,6 +494,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AD813F22E01610000952862 /* AppIcon.icon in Resources */,
 				0A653D372D90554E00FB7846 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -498,6 +504,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0A653D362D90554E00FB7846 /* Assets.xcassets in Resources */,
+				0AD813F32E01610000952862 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -505,6 +512,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AD813F12E01610000952862 /* AppIcon.icon in Resources */,
 				0AEC7C20299BA2FB005BBB0E /* Preview Assets.xcassets in Resources */,
 				0AEC7C1C299BA2FB005BBB0E /* Assets.xcassets in Resources */,
 			);
@@ -854,6 +862,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = InterShare/InterShare.entitlements;
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "InterShare/InterShare-mac.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -886,7 +895,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
-				MARKETING_VERSION = 0.2.0;
+				MARKETING_VERSION = 0.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.julian-baumann.InterShare";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -903,6 +912,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = InterShare/InterShare.entitlements;
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "InterShare/InterShare-mac.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -935,7 +945,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
-				MARKETING_VERSION = 0.2.0;
+				MARKETING_VERSION = 0.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.julian-baumann.InterShare";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

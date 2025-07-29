@@ -21,16 +21,16 @@ struct ContentView: View {
     let discovery = DiscoveryService()
     
     init() {
-        var titleFont = UIFont.preferredFont(forTextStyle: .largeTitle)
-
-        titleFont = UIFont(
-            descriptor:
-                titleFont.fontDescriptor
-                .withDesign(.rounded)?.withSymbolicTraits(.traitBold) ?? titleFont.fontDescriptor,
-            size: titleFont.pointSize
-        )
-
-        UINavigationBar.appearance().largeTitleTextAttributes = [.font: titleFont]
+//        var titleFont = UIFont.preferredFont(forTextStyle: .largeTitle)
+//
+//        titleFont = UIFont(
+//            descriptor:
+//                titleFont.fontDescriptor
+//                .withDesign(.rounded)?.withSymbolicTraits(.traitBold) ?? titleFont.fontDescriptor,
+//            size: titleFont.pointSize
+//        )
+//
+//        UINavigationBar.appearance().largeTitleTextAttributes = [.font: titleFont]
     }
     
     func getRequestText() -> String {
@@ -92,7 +92,8 @@ struct ContentView: View {
                         viewModel.showDeviceNamingAlert = true
                     }) {
                         ZStack {
-                            Circle().frame(width: 22, height: 22)
+                            Circle()
+                                .frame(width: 22, height: 22)
                             Text(viewModel.deviceName.first?.uppercased() ?? "")
                                 .foregroundStyle(.white)
                                 .font(.system(size: 16, weight: .bold, design: .rounded))
@@ -101,7 +102,7 @@ struct ContentView: View {
                         Text(viewModel.deviceName)
                             .padding(.vertical, 5)
                     }
-                    .buttonStyle(.bordered)
+                    .glassButtonStyle()
                     .controlSize(.mini)
                     .buttonBorderShape(.capsule)
                     .lineLimit(1)
@@ -152,11 +153,8 @@ struct ContentView: View {
                             .frame(height: 60)
                         }
                         .disabled(!viewModel.isPoweredOn || viewModel.loadingPhotos)
-                        .buttonStyle(.borderedProminent)
-//                        .buttonBorderShape(.roundedRectangle)
-                        .buttonBorderShape(.roundedRectangle(radius: 25))
-                        .tint(Color("ButtonTint"))
-                        .foregroundStyle(Color("ButtonTextColor"))
+                        .shareButtonStyle()
+                        .animation(nil, value: UUID())
                         
                         Button(action: {
                             showFileImporter = true
@@ -171,11 +169,13 @@ struct ContentView: View {
                             .frame(height: 60)
                         }
                         .disabled(!viewModel.isPoweredOn || viewModel.loadingPhotos)
-                        .buttonStyle(.borderedProminent)
+//                        .buttonStyle(.glassButtonStyle())
+                        .shareButtonStyle()
+                        .animation(nil, value: UUID())
 //                        .buttonBorderShape(.roundedRectangle)
-                        .buttonBorderShape(.roundedRectangle(radius: 25))
-                        .tint(Color("ButtonTint"))
-                        .foregroundStyle(Color("ButtonTextColor"))
+//                        .buttonBorderShape(.roundedRectangle(radius: 25))
+//                        .tint(Color("ButtonTint"))
+//                        .foregroundStyle(Color("ButtonTextColor"))
                         .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.item], allowsMultipleSelection: true, onCompletion: { results in
                             switch results {
                             case .success(let fileUrls):
@@ -207,11 +207,12 @@ struct ContentView: View {
                             .frame(height: 60)
                         }
                         .disabled(!viewModel.isPoweredOn || viewModel.loadingPhotos)
-                        .buttonStyle(.borderedProminent)
+//                        .buttonStyle(.borderedProminent)
 //                        .buttonBorderShape(.roundedRectangle)
-                        .buttonBorderShape(.roundedRectangle(radius: 25))
-                        .tint(Color("ButtonTint"))
-                        .foregroundStyle(Color("ButtonTextColor"))
+//                        .buttonBorderShape(.roundedRectangle(radius: 25))
+//                        .tint(Color("ButtonTint"))
+//                        .foregroundStyle(Color("ButtonTextColor"))
+                        .shareButtonStyle()
                         .animation(nil, value: UUID())
                     }
                     .padding(.horizontal)
@@ -223,11 +224,12 @@ struct ContentView: View {
                             .padding(.vertical, 10)
                             .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.bordered)
-                    .buttonBorderShape(.capsule)
-                    .tint(Color("ReceivedFilesTint"))
+                    .secondaryButtonStyle()
+//                    .buttonBorderShape(.capsule)
+//                    .tint(Color("ReceivedFilesTint"))
                     .padding(.horizontal)
                     .animation(nil, value: UUID())
+//                    .glassEffectIfCompatible()
                 }
                 .frame(maxWidth: 600)
                 .ignoresSafeArea(.keyboard)
@@ -319,8 +321,10 @@ struct ContentView: View {
                             .interactiveDismissDisabled()
                             .toolbar(content: {
                                 ToolbarItem(placement: .confirmationAction) {
-                                    Button("Done") {
+                                    Button() {
                                         viewModel.showDeviceSelectionSheet = false
+                                    } label: {
+                                        Image(systemName: "xmark")
                                     }
                                 }
                             })
@@ -369,22 +373,24 @@ struct ContentView: View {
         }
         
         .toolbar {
-            Menu {
-                Button(action: {}) {
-                    Label("App Version: \(getAppVersion())", systemImage: "info")
-                }.disabled(true)
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    Button(action: {}) {
+                        Label("App Version: \(getAppVersion())", systemImage: "info")
+                    }.disabled(true)
 
-                Link(destination: URL(string: "https://buymeacoffee.com/julianbaumann")!) {
-                    Label("Buy me a coffee", systemImage: "cup.and.heat.waves")
-                }
+                    Link(destination: URL(string: "https://buymeacoffee.com/julianbaumann")!) {
+                        Label("Buy me a coffee", systemImage: "cup.and.heat.waves")
+                    }
 
-                Button(action: shareFile) {
-                    Label("Share Logs", systemImage: "square.and.arrow.up")
+                    Button(action: shareFile) {
+                        Label("Share Logs", systemImage: "square.and.arrow.up")
+                    }
+                } label: {
+                    Image(systemName: "questionmark.circle")
                 }
-            } label: {
-                Image(systemName: "questionmark.circle")
             }
-        }
+        }   
         .navigationTitle("InterShare")
     }
 }

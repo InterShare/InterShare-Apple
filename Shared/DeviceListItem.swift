@@ -81,6 +81,7 @@ struct DeviceInfoListView: View {
             ZStack {
                 Circle()
                     .fill(.linearGradient(colors: [.gray], startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .glassEffectIfCompatible()
                 #if os(macOS)
                     .frame(width: 45, height: 45)
                 #else

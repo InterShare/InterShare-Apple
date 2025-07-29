@@ -98,7 +98,7 @@ class ShareViewModel: ObservableObject, ShareProgressDelegate {
             }
             
             showIncompatibleMessage = true
-
+            
             return
         }
         

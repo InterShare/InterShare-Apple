@@ -139,8 +139,7 @@ struct ShareView: View {
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(.regularMaterial)
-            .cornerRadius(15)
+            .glassEffectCard()
             .padding()
             .applySafeAreaPadding()
         }

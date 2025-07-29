@@ -21,7 +21,7 @@ struct ReadyToReceiveView: View {
             }
         }
         .padding(5)
-        .background(.ultraThinMaterial)
+        .glassEffectIfCompatible()
         .cornerRadius(15)
         .applySafeAreaPadding()
     }
